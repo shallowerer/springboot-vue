@@ -2,14 +2,14 @@
   <div>
     <table>
       <tr>
-        <td>用户编号</td>
-        <td>用户账号</td>
-        <td>用户名称</td>
+        <td>标号</td>
+        <td>名字</td>
+        <td>电话</td>
       </tr>
-			<tr v-for="item in users">
-				<td>{{ item.sid }}</td>
-				<td>{{ item.uid }}</td>
-				<td>{{ item.uname }}</td>
+			<tr v-for="(item,index) in users" :key="index">
+				<td>{{ item.id }}</td>
+				<td>{{ item.username }}</td>
+				<td>{{ item.mobile }}</td>
 			</tr>
     </table>
   </div>
