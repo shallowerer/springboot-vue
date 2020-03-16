@@ -36,7 +36,7 @@ export default {
         navList: [
           {name: '/index', navItem: '首页'},
           {name: '/shop', navItem: '店铺'},
-          {name: '/commodity', navItem: '商品'},
+          {name: '/commodityindex', navItem: '商品'},
           {name: '/shopcart', navItem: '购物车'},
           {name: '/bought', navItem: '购买历史'},
           {name: '/admin/dashboard', navItem: '管理中心'}
@@ -46,10 +46,8 @@ export default {
       }
     },
     mounted: function () {
-    // 获得第一级路由，以设置导航栏高亮
+    // 获得第一级路由，以设置导航栏高亮,初次进入时，没有此判断会导致首页不亮
     var x = this.$route.path.indexOf('/', 1)
-    console.log(this.$route);
-    
     if (x !== -1) {
       this.path = this.$route.path.substring(0, x)
     } else {
@@ -69,6 +67,7 @@ export default {
 <style>
   a {
     text-decoration: none;
+    /* color:rgb(66, 162, 226) */
   }
   span {
     pointer-events: none;

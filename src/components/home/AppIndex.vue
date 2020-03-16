@@ -4,8 +4,12 @@
     <div class="home">
       <div id="header-div">
         <div style="height: 150px"></div>
-        <carousel />
+        <!-- <quick-nav style="float: right;margin-top: -220px;margin-right: 480px"></quick-nav> -->
+        <carousel id="carousel"/>
       </div>
+      <demeanor id="demeanor"/>
+      <information />
+      <about-me id="aboutme"/>
     </div>
   </div>
 </template>
@@ -13,11 +17,19 @@
 <script>
 import SideMenu from './SideMenu'
 import Carousel from './Carousel'
+// import QuickNav from './QuickNav'
+import Demeanor from './Demeanor'
+import Information from './Information'
+import AboutMe from './AboutMe'
 export default {
  name: 'AppIndex',
  components: {
    SideMenu,
-   Carousel
+   Carousel,
+  //  QuickNav,
+  Information,
+  Demeanor,
+  AboutMe
  }
 }
 </script>
@@ -32,15 +44,18 @@ export default {
   }
 
   .home {
-    width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
+    padding: 0;
+    position: relative;
+    width: 900px;
+    margin:0 auto;
   }
 
-  .header-div {
+  #header-div {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 900px;
     padding-bottom: 20px;
-    padding-left: 5px;
-    background-color: #EEE;
+    background-color: #fff;
   }
 </style>

@@ -34,9 +34,9 @@ const routes = [
         component: () => import( '../components/shop/Shop.vue')
       },
       {
-        path: '/commodity',
-        name: 'Commodity',
-        component: () => import( '../components/commodity/Commodity.vue')
+        path: '/commodityindex',
+        name: 'CommodityIndex',
+        component: () => import( '../components/commodity/CommodityIndex.vue')
       },
       // {
       //   path: '/shopcart',
