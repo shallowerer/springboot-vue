@@ -14,17 +14,17 @@
           <span>{{item.press}}</span>
         </p> -->
         <!-- <p slot="content" style="width: 300px" class="abstract">{{item.abs}}</p> -->
-        <el-card style="width: 280px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="book"
+        <el-card style="width: 280px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="commodity"
                  bodyStyle="padding:10px" shadow="hover">
           <div class="cover">
-            <img :src="item.cover" alt="封面">
+            <img :src="getImgUrl(item.cover)" alt="封面">
           </div>
           <div class="info">
             <div class="title">
               <a href="">{{item.title}}</a>
             </div>
           </div>
-          <div class="author">{{item.author}}</div>
+          <!-- <div class="author">{{item.author}}</div> -->
         </el-card>
       </el-tooltip>
     </el-row>
@@ -62,7 +62,15 @@
     mounted: function () {
       this.loadCommodity()
     },
+  
     methods: {
+      getImgUrl(serveImgUrl){
+        if(!serveImgUrl){
+          serveImgUrl = 'vue.png'
+        }
+        let trueUrl = require('@/static/img/carousel/'+ serveImgUrl);
+        return trueUrl;
+      },
       loadCommodity() {
         var _this = this    
         this.$axios.get('/findAllCommodity').then(res => {
@@ -99,7 +107,7 @@
 <style scoped>
 
   .cover {
-    width: 115px;
+    width: 100%;
     height: 172px;
     margin-bottom: 7px;
     overflow: hidden;
@@ -107,8 +115,8 @@
   }
 
   img {
-    width: 115px;
-    height: 172px;
+    width: 100%;
+    height: 100%;
     /*margin: 0 auto;*/
   }
 
