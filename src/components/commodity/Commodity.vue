@@ -1,11 +1,11 @@
 <template>
   <div>
     
-    <el-row style="height: 840px;">
+    <el-row style="height: 800px;">
       <!-- <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
       <view-switch class="switch"></view-switch> -->
       <el-tooltip effect="dark" placement="right"
-                  v-for="item in items.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                  v-for="item in items"
                   :key="item.id">
         <p slot="content" style="font-size: 14px;margin-bottom: 6px;">{{item.title}}</p>
         <!-- <p slot="content" style="font-size: 13px;margin-bottom: 6px">
@@ -29,12 +29,12 @@
       </el-tooltip>
     </el-row>
     <el-row>
-        <!-- <el-pagination
-          @current-change="handleCurrentChange"
+        <el-pagination
+          @current-change="loadCommodity"
           :current-page="currentPage"
           :page-size="pagesize"
-          :total="books.length">
-        </el-pagination> -->
+          :total="total">
+        </el-pagination>
     </el-row>
   </div>
   <!-- <div >
@@ -55,11 +55,12 @@
     data () {
       return {
         items: [],
-        currentPage: 1,
-        pagesize: 18
+        currentPage: 0,
+        pagesize: 10,
+        total:10
       }
     },
-    mounted: function () {
+    mounted() {
       this.loadCommodity()
     },
   
@@ -71,14 +72,16 @@
         let trueUrl = require('@/static/img/carousel/'+ serveImgUrl);
         return trueUrl;
       },
-      loadCommodity() {
+      loadCommodity(currentPage = 1) {
         var _this = this    
-        this.$axios.get('/findAllCommodity').then(res => {
+        this.$axios.get('/paging/'+(currentPage-1)+'/12').then(res => {
           if (res && res.status === 200) {
-            _this.items = res.data
+            _this.items = res.data.content;
+            _this.pagesize = res.data.size;
+            _this.total = res.data.totalElements
           }
         })
-      }
+      },
 
       // loadBooks () {
       //   var _this = this
@@ -89,6 +92,7 @@
       //   })
       // },
       // handleCurrentChange: function (currentPage) {
+      //   console.log(currentPage);
       //   this.currentPage = currentPage
       // },
       // searchResult () {

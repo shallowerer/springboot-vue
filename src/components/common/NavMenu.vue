@@ -35,7 +35,7 @@ export default {
       return {
         navList: [
           {name: '/index', navItem: '首页'},
-          {name: '/shop', navItem: '店铺'},
+          {name: '/shopindex', navItem: '店铺'},
           {name: '/commodityindex', navItem: '商品'},
           {name: '/shopcart', navItem: '购物车'},
           {name: '/bought', navItem: '购买历史'},

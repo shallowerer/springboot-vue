@@ -5,7 +5,7 @@
       <SideMenu @indexSelect="listByCategory" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <Commodity class="commodity-area" ref="commodityArea"></Commodity>
+      <Shop class="shop-area" ref="shop"></Shop>
     </el-main>
   </el-container>
 </template>
@@ -13,10 +13,10 @@
 <script>
 
   import SideMenu from './SideMenu'
-  import Commodity from './Commodity'
+  import Shop from './Shop'
 
   export default {
-    name: 'CommodityIndex',
+    name: 'ShopIndex',
     data() {
       return {
         items:[
@@ -31,7 +31,7 @@
       }
     },
     components: {
-      Commodity,
+      Shop,
       SideMenu
     },
     methods: {
@@ -45,14 +45,14 @@
         //   }
         // })
         console.log('listByCategory');
-        this.$refs.commodityArea.items = this.items;    
+        this.$refs.shop.items = this.items;    
       }
     }
   }
 </script>
 
 <style scoped>
-  .commodity-area {
+  .shop-area {
     width: 1260px;
     margin-left: auto;
     margin-right: auto;

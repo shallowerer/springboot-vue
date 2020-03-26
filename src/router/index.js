@@ -29,9 +29,9 @@ const routes = [
         component: AppIndex
       },
       {
-        path: '/shop',
-        name: 'Shop',
-        component: () => import( '../components/shop/Shop.vue')
+        path: '/shopindex',
+        name: 'ShopIndex',
+        component: () => import( '../components/shop/ShopIndex.vue')
       },
       {
         path: '/commodityindex',
