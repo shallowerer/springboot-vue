@@ -18,17 +18,7 @@
   export default {
     name: 'CommodityIndex',
     data() {
-      return {
-        items:[
-          {id:1},
-          {id:2},
-          {id:3},
-          {id:4},
-          {id:5},
-          {id:6},
-          {id:7},
-        ]
-      }
+
     },
     components: {
       Commodity,
@@ -38,14 +28,17 @@
       listByCategory () {
         var _this = this
         var cid = this.$refs.sideMenu.cid
-        // var url = 'categories/' + cid + '/books'
-        // this.$axios.get(url).then(resp => {
-        //   if (resp && resp.status === 200) {
-        //     _this.$refs.booksArea.books = resp.data
-        //   }
-        // })
-        console.log('listByCategory');
-        this.$refs.commodityArea.items = this.items;    
+        var url = 'categories/' + cid + '/commodities'
+        this.$axios.get(url).then(resp => {
+          if (resp && resp.status === 200) {
+            _this.$refs.commodityArea.currentPage = 1;
+            _this.$refs.commodityArea.items = resp.data
+          }
+        })
+        // console.log('listByCategory');
+        this.$refs.commodityArea.items = this.items; 
+        console.log(this.items);
+           
       }
     }
   }

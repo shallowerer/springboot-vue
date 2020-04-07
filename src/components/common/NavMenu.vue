@@ -37,8 +37,8 @@ export default {
           {name: '/index', navItem: '首页'},
           {name: '/shopindex', navItem: '店铺'},
           {name: '/commodityindex', navItem: '商品'},
-          {name: '/shopcart', navItem: '购物车'},
-          {name: '/bought', navItem: '购买历史'},
+          // {name: '/shopcart', navItem: '购物车'},
+          // {name: '/bought', navItem: '购买历史'},
           {name: '/admin/dashboard', navItem: '管理中心'}
         ],
         keywords: '',

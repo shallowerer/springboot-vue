@@ -13,6 +13,71 @@ var axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:8899/api'
 axios.defaults.withCredentials = true
 
+router.beforeEach((to, from, next) => {
+  if (store.state.user.username && to.path.startsWith('/admin')) {
+    axios.get('/authentication').then(resp => {
+      initAdminMenu(router, store)
+    })
+  }
+  if (to.meta.requireAuth) {
+    console.log(11);
+    if (store.state.user.username) {
+      axios.get('/authentication').then(resp => {
+        if (resp){
+          next()
+        } 
+      })
+    } else {
+      next({
+        path: 'login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+const initAdminMenu = (router, store) => {
+  if (store.state.adminMenus.length > 0) {
+    return
+  }
+  axios.get('/menu').then(resp => {
+    if (resp && resp.status === 200) {
+      var fmtRoutes = formatRoutes(resp.data)
+      router.addRoutes(fmtRoutes)
+      store.commit('initAdminMenu', fmtRoutes)
+    }
+  })
+}
+
+const formatRoutes = (routes) => {
+  let fmtRoutes = []
+  routes.forEach(route => {
+    if (route.children) {
+      route.children = formatRoutes(route.children)
+    }
+
+    let fmtRoute = {
+      path: route.path,
+      component: resolve => {
+        require(['./components/admin/' + route.component + '.vue'], resolve)
+      },
+      name: route.name,
+      nameZh: route.nameZh,
+      iconCls: route.iconCls,
+      meta: {
+        requireAuth: true
+      },
+      children: route.children
+    }
+    fmtRoutes.push(fmtRoute)
+  })
+  return fmtRoutes
+}
+
+
+
 new Vue({
   router,
   store,

@@ -5,7 +5,7 @@
       <!-- <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
       <view-switch class="switch"></view-switch> -->
       <el-tooltip effect="dark" placement="right"
-                  v-for="item in items"
+                  v-for="item in items.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                   :key="item.id">
         <p slot="content" style="font-size: 14px;margin-bottom: 6px;">{{item.title}}</p>
         <!-- <p slot="content" style="font-size: 13px;margin-bottom: 6px">
@@ -30,10 +30,10 @@
     </el-row>
     <el-row>
         <el-pagination
-          @current-change="loadCommodity"
+          @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-size="pagesize"
-          :total="total">
+          :total="items.length">
         </el-pagination>
     </el-row>
   </div>
@@ -55,9 +55,9 @@
     data () {
       return {
         items: [],
-        currentPage: 0,
-        pagesize: 10,
-        total:10
+        currentPage: 1,
+        pagesize: 12
+
       }
     },
     mounted() {
@@ -72,15 +72,27 @@
         let trueUrl = require('@/static/img/carousel/'+ serveImgUrl);
         return trueUrl;
       },
-      loadCommodity(currentPage = 1) {
-        var _this = this    
-        this.$axios.get('/paging/'+(currentPage-1)+'/12').then(res => {
-          if (res && res.status === 200) {
-            _this.items = res.data.content;
-            _this.pagesize = res.data.size;
-            _this.total = res.data.totalElements
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
+      },
+      loadCommodity() {
+        var _this = this
+        this.$axios.get('/findAllCommodity').then(resp => {
+          if (resp && resp.status === 200) {
+            console.log(resp);
+            
+            _this.items = resp.data
           }
         })
+
+        // var _this = this    
+        // this.$axios.get('/paging/'+(currentPage-1)+'/12').then(res => {
+        //   if (res && res.status === 200) {
+        //     _this.items = res.data.content;
+        //     _this.pagesize = res.data.size;
+        //     _this.total = res.data.totalElements
+        //   }
+        // })
       },
 
       // loadBooks () {
