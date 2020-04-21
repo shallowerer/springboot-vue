@@ -52,6 +52,8 @@
         }
       },
       createRole () {
+        console.log('添加角色');
+        
         this.$axios
           .post('/admin/role', {
             name: this.roleForm.name,
@@ -70,7 +72,11 @@
               })
             }
           })
-          .catch(failResponse => {})
+          .catch(failResponse => {
+            this.$alert('发生错误', '提示', {
+                confirmButtonText: '确定'
+              })
+          })
         this.dialogFormVisible = false
       }
     }

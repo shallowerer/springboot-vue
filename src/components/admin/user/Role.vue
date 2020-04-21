@@ -38,7 +38,11 @@
         <el-breadcrumb-item>角色配置</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
+
+    <!-- 角色添加 -->
     <role-create @onSubmit="listRoles()"></role-create>
+
+
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
         :data="roles"
@@ -88,7 +92,8 @@
             </el-button>
             <el-button
               type="text"
-              size="small">
+              size="small"
+              @click="deleteRole(scope.row)">
               移除
             </el-button>
           </template>
@@ -189,27 +194,52 @@
           this.$alert('无法禁用系统管理员！')
         }
       },
-    editRole (role) {
-      this.dialogFormVisible = true
-      this.selectedRole = role
-      let permIds = []
-      for (let i = 0; i < role.perms.length; i++) {
-        permIds.push(role.perms[i].id)
-      }
-      this.selectedPermsIds = permIds
-      let menuIds = []
-      for (let i = 0; i < role.menus.length; i++) {
-        menuIds.push(role.menus[i].id)
-        for (let j = 0; j < role.menus[i].children.length; j++) {
-          menuIds.push(role.menus[i].children[j].id)
+      editRole (role) {
+        this.dialogFormVisible = true
+        this.selectedRole = role
+        let permIds = []
+        for (let i = 0; i < role.perms.length; i++) {
+          permIds.push(role.perms[i].id)
         }
-      }
-      this.selectedMenusIds = menuIds
-      // 判断树是否已经加载，第一次打开对话框前树不存在，会报错。所以需要设置 default-checked
-      if (this.$refs.tree) {
-        this.$refs.tree.setCheckedKeys(menuIds)
-      }
-    },
+        this.selectedPermsIds = permIds
+        let menuIds = []
+        for (let i = 0; i < role.menus.length; i++) {
+          menuIds.push(role.menus[i].id)
+          for (let j = 0; j < role.menus[i].children.length; j++) {
+            menuIds.push(role.menus[i].children[j].id)
+          }
+        }
+        this.selectedMenusIds = menuIds
+        // 判断树是否已经加载，第一次打开对话框前树不存在，会报错。所以需要设置 default-checked
+        if (this.$refs.tree) {
+          this.$refs.tree.setCheckedKeys(menuIds)
+        }
+      },
+      deleteRole (role) {
+        let _this = this
+        if(role.id != 1 && role.id != 2 && role.id != 3 && role.id != 4 && role.id != 5){
+          this.$axios.delete(`/admin/deleteRole/${role.id}`,{
+          }).then(resp => {
+            if (resp.data.code === 200) {
+              this.$alert(resp.data.data, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.listRoles()
+            } else {
+              this.$alert(resp.data.message, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          }).catch(failResponse => {
+            this.$alert('发生错误', '提示', {
+                confirmButtonText: '确定'
+              })
+          })
+        }else{
+          this.$alert('不能删除初始角色！')
+        }
+        
+      },
       onSubmit (role) {
         let _this = this
         // 根据视图绑定的角色 id 向后端传送角色信息

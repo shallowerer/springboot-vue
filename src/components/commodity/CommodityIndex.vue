@@ -18,7 +18,9 @@
   export default {
     name: 'CommodityIndex',
     data() {
-
+      return{
+        
+      }
     },
     components: {
       Commodity,

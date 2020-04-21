@@ -1,6 +1,7 @@
 <template>
   <div style="text-align: left">
     <el-button class="add-button" type="success" @click="dialogFormVisible = true">批量添加用户</el-button>
+    
     <el-dialog
       title="添加用户"
       :visible.sync="dialogFormVisible"
@@ -17,7 +18,7 @@
                     auto-complete="off" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.name"
+          <el-input type="text" v-model="loginForm.truename"
                     auto-complete="off" placeholder="真实姓名"></el-input>
         </el-form-item>
         <el-form-item>
@@ -49,7 +50,7 @@
           loginForm: {
             username: '',
             password: '',
-            name: '',
+            truename: '',
             phone: '',
             email: ''
           }
@@ -60,7 +61,7 @@
           this.loginForm = {
             username: '',
             password: '',
-            name: '',
+            truename: '',
             phone: '',
             email: ''
           }
@@ -70,7 +71,7 @@
             .post('/register', {
               username: this.loginForm.username,
               password: this.loginForm.password,
-              name: this.loginForm.name,
+              truename: this.loginForm.truename,
               phone: this.loginForm.phone,
               email: this.loginForm.email
             })

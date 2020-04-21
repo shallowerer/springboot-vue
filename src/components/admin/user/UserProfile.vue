@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    <!-- （编辑）修改信息弹框 -->
     <el-dialog
       title="修改用户信息"
       :visible.sync="dialogFormVisible">
@@ -8,7 +10,7 @@
           <label>{{selectedUser.username}}</label>
         </el-form-item>
         <el-form-item label="真实姓名" label-width="120px" prop="name">
-          <el-input v-model="selectedUser.name" autocomplete="off"></el-input>
+          <el-input v-model="selectedUser.truename" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机号" label-width="120px" prop="phone">
           <el-input v-model="selectedUser.phone" autocomplete="off"></el-input>
@@ -30,6 +32,7 @@
         <el-button type="primary" @click="onSubmit(selectedUser)">确 定</el-button>
       </div>
     </el-dialog>
+
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
@@ -37,7 +40,10 @@
         <el-breadcrumb-item>用户信息</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
+
+    <!-- 批量添加组件 -->
     <bulk-registration @onSubmit="listUsers()"></bulk-registration>
+
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
         :data="users"
@@ -61,7 +67,7 @@
           fit>
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="truename"
           label="真实姓名"
           fit>
         </el-table-column>
@@ -89,6 +95,7 @@
             </el-switch>
           </template>
         </el-table-column>
+        
         <el-table-column
           label="操作"
           width="120">
@@ -100,6 +107,7 @@
               编辑
             </el-button>
             <el-button
+              @click="deleteUser(scope.row)"
               type="text"
               size="small">
               移除
@@ -187,7 +195,7 @@
           }
           this.$axios.put('/admin/user', {
             username: user.username,
-            name: user.name,
+            truename: user.truename,
             phone: user.phone,
             email: user.email,
             roles: roles
@@ -208,6 +216,30 @@
             roleIds.push(user.roles[i].id)
           }
           this.selectedRolesIds = roleIds
+        },
+        deleteUser(user){
+          let _this = this
+          if(user.id != 1 && user.id != 2 && user.id != 3 && user.id != 4 && user.id != 5){
+            this.$axios.delete(`/admin/deleteUser/${user.id}`,{
+            }).then(resp => {
+              if (resp.data.code === 200) {
+                this.$alert(resp.data.data, '提示', {
+                  confirmButtonText: '确定'
+                })
+                this.listUsers()
+              } else {
+                this.$alert(resp.data.message, '提示', {
+                  confirmButtonText: '确定'
+                })
+              }
+            }).catch(failResponse => {
+              this.$alert('发生错误', '提示', {
+                  confirmButtonText: '确定'
+                })
+            })
+          }else{
+            this.$alert('不能禁用预设用户！')
+          }                
         },
         resetPassword (username) {
           this.$axios.put('/admin/user/password', {
