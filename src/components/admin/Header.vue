@@ -24,11 +24,11 @@
             
             // // 清空路由，防止路由重复加载
             let newRouter = createRouter()
-            console.log('退出');
+            console.log('退出成功');
             _this.$router.matcher = newRouter.matcher
           }
         }).catch(failResponse => {
-          console.log('退出11');
+          console.log('退出错误');
         })
       }
     }
@@ -38,7 +38,7 @@
 <style scoped>
   .admin-header {
     height: 80px;
-    opacity: 0.85;
+    opacity: 1;
     line-height: 40px;
     min-width: 900px;
   }

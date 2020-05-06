@@ -17,7 +17,7 @@
         <el-card style="width: 280px;margin-bottom: 20px;height: 233px;float: left;margin-right: 15px" class="commodity"
                  bodyStyle="padding:10px" shadow="hover">
           <div class="cover">
-            <img :src="getImgUrl(item.cover)" alt="封面">
+            <img :src="item.cover" alt="封面">
           </div>
           <div class="info">
             <div class="title">
@@ -65,13 +65,13 @@
     },
   
     methods: {
-      getImgUrl(serveImgUrl){
-        if(!serveImgUrl){
-          serveImgUrl = 'vue.png'
-        }
-        let trueUrl = require('@/static/img/carousel/'+ serveImgUrl);
-        return trueUrl;
-      },
+      // getImgUrl(serveImgUrl){
+      //   if(!serveImgUrl){
+      //     serveImgUrl = 'vue.png'
+      //   }
+      //   let trueUrl = require('@/static/img/carousel/'+ serveImgUrl);
+      //   return trueUrl;
+      // },
       handleCurrentChange: function (currentPage) {
         this.currentPage = currentPage
       },
