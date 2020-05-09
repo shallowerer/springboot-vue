@@ -1,108 +1,275 @@
 <template>
   <div>
-    <el-container style="height: 500px; border: 1px solid #eee">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu :default-openeds="['1', '3']">
-      <el-submenu index="1">
-        <template slot="title"><i class="el-icon-message"></i>导航一</template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-submenu index="2">
-        <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="2-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="2-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="3-1">选项1</el-menu-item>
-          <el-menu-item index="3-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="3-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="3-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-    </el-menu>
-  </el-aside>
-  
-  <el-container>
-    <el-header style="text-align: right; font-size: 12px">
-      <el-dropdown>
-        <i class="el-icon-setting" style="margin-right: 15px"></i>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <span>王小虎</span>
-    </el-header>
-    
-    <el-main>
-      <el-table :data="tableData">
-        <el-table-column prop="date" label="日期" width="140">
+    <!-- （编辑）修改信息弹框 -->
+    <el-dialog
+      title="修改会员信息"
+      :visible.sync="dialogFormVisible">
+      <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
+        <el-form-item label="会员标识" label-width="120px" prop="id">
+          <label>{{selectedMember.id}}</label>
+        </el-form-item>
+        <el-form-item label="会员编号" label-width="120px" prop="name">
+          <el-input v-model="selectedMember.memberno" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="会员昵称" label-width="120px" prop="name">
+          <el-input v-model="selectedMember.membername" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="真实姓名" label-width="120px" prop="phone">
+          <el-input v-model="selectedMember.truename" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" label-width="120px" prop="email">
+          <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" label-width="120px" prop="email">
+          <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地址" label-width="120px" prop="password">
+          <el-input v-model="selectedMember.memberaddr" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit(selectedMember)">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-row style="margin: 18px 0px 0px 18px ">
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
+        <el-breadcrumb-item>会员管理</el-breadcrumb-item>
+        <el-breadcrumb-item>会员信息</el-breadcrumb-item>
+      </el-breadcrumb>
+    </el-row>
+
+    <!-- 批量添加组件 -->
+    <bulk-registration @onSubmit="listMembers()"></bulk-registration>
+
+    <el-card style="margin: 18px 2%;width: 95%">
+      <el-table
+        :data="members"
+        stripe
+        :default-sort = "{prop: 'id', order: 'ascending'}"
+        style="width: 100%"
+        :max-height="tableHeight">
+        <el-table-column
+          type="selection"
+          width="55">
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="120">
+        <el-table-column
+          prop="id"
+          label="id"
+          sortable
+          width="100">
         </el-table-column>
-        <el-table-column prop="address" label="地址">
+        <el-table-column
+          prop="memberno"
+          label="会员编号"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="membername"
+          label="会员昵称"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="truename"
+          label="真实姓名"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="phone"
+          label="手机号"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱"
+          show-overflow-tooltip
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="memberaddr"
+          label="会员地址"
+          fit>
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          sortable
+          width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enabled"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="(value) => commitStatusChange(value, scope.row)">
+            </el-switch>
+          </template>
+        </el-table-column>
+        
+        <el-table-column
+          label="操作"
+          width="120">
+          <template slot-scope="scope">
+            <el-button
+              @click="editMembers(scope.row)"
+              type="text"
+              size="small">
+              编辑
+            </el-button>
+            <el-button
+              @click="deleteMembers(scope.row)"
+              type="text"
+              size="small">
+              移除
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
-    </el-main>
-  </el-container>
-</el-container>
-
+      <div style="margin: 20px 0 20px 0;float: left">
+        <el-button>取消选择</el-button>
+        <el-button>批量删除</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
-    return {
-      tableData: Array(20).fill(item)
+  import BulkRegistration from './BulkRegistration'
+    export default {
+      name: 'UserProfile',
+      components: {BulkRegistration},
+      data () {
+          return {
+            members: [],
+            roles: [],
+            dialogFormVisible: false,
+            selectedMember: [],
+            selectedRolesIds: []
+          }
+      },
+      mounted () {
+        this.listMembers()
+        // this.listRoles()
+      },
+      computed: {
+        tableHeight () {
+          return window.innerHeight - 320
+        }
+      },
+      methods: {
+        listMembers () {
+          var _this = this
+          this.$axios.get('/memberInfo').then(resp => {
+            if (resp && resp.status === 200) {
+              _this.members = resp.data
+              // console.log( _this.members); 
+            }
+          })
+        },
+        // listRoles () {
+        //   var _this = this
+        //   this.$axios.get('/admin/role').then(resp => {
+        //     if (resp && resp.status === 200) {
+        //       _this.roles = resp.data
+        //     }
+        //   })
+        // },
+        commitStatusChange (value, member) {
+          this.$axios.put('/member/status', {
+            enabled: value,
+            membername: member.membername,
+            memberno: member.memberno
+          }).then(resp => {
+            if (resp && resp.status === 200) {
+              if (value) {
+                this.$message('用户 [' + member.membername + '] 已启用')
+              } else {
+                this.$message('用户 [' + member.membername + '] 已禁用')
+              }
+            }
+          })
+        },
+        onSubmit (selectedMember) {
+          // let _this = this
+          // // 根据视图绑定的角色 id 向后端传送角色信息
+          // let roles = []
+          // for (let i = 0; i < _this.selectedRolesIds.length; i++) {
+          //   for (let j = 0; j < _this.roles.length; j++) {
+          //     if (_this.selectedRolesIds[i] === _this.roles[j].id) {
+          //       roles.push(_this.roles[j])
+          //     }
+          //   }
+          // }
+          let _this = this
+          this.$axios.put('/member/update',{
+            id: selectedMember.id,
+            memberno: selectedMember.memberno,
+            membername: selectedMember.membername,
+            truename: selectedMember.truename,
+            phone: selectedMember.phone,
+            email: selectedMember.email,
+            memberaddr: selectedMember.memberaddr
+          }).then(resp => {
+            if (resp && resp.status === 200) {
+              this.$alert('用户信息修改成功')
+              this.dialogFormVisible = false
+              // 修改角色后重新请求用户信息，实现视图更新
+              this.listMembers()
+            }
+          }).catch((failResponse) => {
+            this.$alert('发生错误', '提示', {
+              confirmButtonText: '确定'
+            })
+          })
+        },
+        editMembers (member) {
+          this.dialogFormVisible = true
+          this.selectedMember = member
+          // let roleIds = []
+          // for (let i = 0; i < user.roles.length; i++) {
+          //   roleIds.push(user.roles[i].id)
+          // }
+          // this.selectedRolesIds = roleIds
+        },
+        deleteMembers(member){
+          this.$confirm('确定删除？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let _this = this
+            this.$axios.delete(`/member/deleteMember/${member.id}`,{
+            }).then(resp => {
+            if (resp.data.code === 200) {
+              this.$alert(resp.data.data, '提示', {
+                confirmButtonText: '确定'
+              })
+              this.listMembers()
+            } else {
+              this.$alert(resp.data.message, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          }).catch(failResponse => {
+            this.$alert('发生错误', '提示', {
+              confirmButtonText: '确定'
+            })
+          }) 
+          })             
+        },
+        // resetPassword (username) {
+        //   this.$axios.put('/admin/user/password', {
+        //     username: username
+        //   }).then(resp => {
+        //     if (resp && resp.status === 200) {
+        //       this.$alert('密码已重置为 123')
+        //   }
+        //   })
+        // }
+      }
     }
-  }
-}
 </script>
 
-<style>
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-  
-  .el-aside {
-    color: #333;
-  }
+<style scoped>
+
 </style>

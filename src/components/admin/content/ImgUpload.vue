@@ -55,7 +55,7 @@
 </script>
 
 <style scoped>
-  .img-upload {
-    /*height: 200px;*/
-  }
+  /*.img-upload {
+   height: 200px;
+  }*/
 </style>
