@@ -1,9 +1,9 @@
 <template>
   <div style="text-align: left">
-    <el-button class="add-button" type="success" @click="dialogFormVisible = true">批量添加</el-button>
+    <el-button class="add-button" type="success" @click="dialogFormVisible = true">批量添加订单</el-button>
     
     <el-dialog
-      title="信息详情"
+      title="添加订单"
       :visible.sync="dialogFormVisible"
       @close="clear"
       width="25%">

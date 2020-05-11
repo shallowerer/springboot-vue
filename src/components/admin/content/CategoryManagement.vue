@@ -2,52 +2,52 @@
   <div>
     <!-- （编辑）修改信息弹框 -->
     <el-dialog
-      title="修改信息内容"
+      title="类型信息"
       :visible.sync="dialogFormVisible">
-      <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
-        <el-form-item label="会员标识" label-width="120px" prop="id">
-          <label>{{selectedMember.id}}</label>
+      <el-form v-model="selectedCate" style="text-align: left" ref="dataForm">
+        <el-form-item label="类型id" label-width="120px" prop="id">
+          <label>{{selectedCate.id}}</label>
         </el-form-item>
-        <el-form-item label="会员编号" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.memberno" autocomplete="off"></el-input>
+        <el-form-item label="类型名称" label-width="120px" prop="name">
+          <el-input v-model="selectedCate.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="会员昵称" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.membername" autocomplete="off"></el-input>
+        <!-- <el-form-item label="会员昵称" label-width="120px" prop="name">
+          <el-input v-model="selectedCate.membername" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" label-width="120px" prop="phone">
-          <el-input v-model="selectedMember.truename" autocomplete="off"></el-input>
+          <el-input v-model="selectedCate.truename" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机号码" label-width="120px" prop="email">
-          <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
+          <el-input v-model="selectedCate.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" label-width="120px" prop="email">
-          <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
+          <el-input v-model="selectedCate.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" label-width="120px" prop="password">
-          <el-input v-model="selectedMember.memberaddr" autocomplete="off"></el-input>
-        </el-form-item>
+          <el-input v-model="selectedCate.memberaddr" autocomplete="off"></el-input>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit(selectedMember)">确 定</el-button>
+        <el-button type="primary" @click="onSubmit(selectedCate)">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>会员管理</el-breadcrumb-item>
-        <el-breadcrumb-item>短信群发</el-breadcrumb-item>
+        <el-breadcrumb-item>门店管理</el-breadcrumb-item>
+        <el-breadcrumb-item>类型管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
 
     <!-- 批量添加组件 -->
-    <bulk-registration @onSubmit="listMembers()"></bulk-registration>
+    <bulk-registration @onSubmit="listCates()"></bulk-registration>
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
-      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.truename" placeholder="会员真名"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.memberno" placeholder="会员编号"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="会员手机号"></el-input>
+      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.name" placeholder="类型名称"></el-input>
+      <!-- <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.memberno" placeholder="会员编号"></el-input> -->
+      <!-- <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="会员手机号"></el-input> -->
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
     </div>
@@ -55,7 +55,7 @@
 
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="members"
+        :data="cates"
         stripe
         :default-sort = "{prop: 'id', order: 'ascending'}"
         style="width: 100%"
@@ -68,9 +68,9 @@
           prop="id"
           label="id"
           sortable
-          width="100">
+         fit>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="memberno"
           label="会员编号"
           fit>
@@ -79,13 +79,13 @@
           prop="membername"
           label="会员昵称"
           fit>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
-          prop="truename"
-          label="真实姓名"
+          prop="name"
+          label="类型名称"
           fit>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="phone"
           label="手机号"
           fit>
@@ -100,11 +100,11 @@
           prop="memberaddr"
           label="会员地址"
           fit>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           label="状态"
           sortable
-          width="100">
+          fit>
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -120,13 +120,13 @@
           width="120">
           <template slot-scope="scope">
             <el-button
-              @click="editMembers(scope.row)"
+              @click="editCate(scope.row)"
               type="text"
               size="small">
               编辑
             </el-button>
             <el-button
-              @click="deleteMembers(scope.row)"
+              @click="deleteCate(scope.row)"
               type="text"
               size="small">
               移除
@@ -166,16 +166,16 @@
             currentPage: 1,   //默认页码为1
             pagesize: 5,  //默认一页显示10条
             totalElements: 0,
-            members: [],
+            cates: [],
             roles: [],
             dialogFormVisible: false,
-            selectedMember: [],
+            selectedCate: [],
             selectedRolesIds: [],
             searchInfo: []
           }
       },
       mounted () {
-        this.listMembers()
+        this.listCates()
         // this.listRoles()
       },
       computed: {
@@ -187,27 +187,26 @@
         handleSizeChange: function (size) {   //一页显示多少条
           this.pagesize = size;
           // console.log(this.pagesize);
-          this.listMembers()
+          this.listCates()
           
         },
         handleCurrentChange: function (currentPage) {  //页码更改方法
           this.currentPage = currentPage;
           // console.log(this.currentPage);
-          this.listMembers()
+          this.listCates()
           
         },
         returnList(){
           var _this = this
-          _this.searchInfo.truename = '',
-          _this.searchInfo.memberno = '',
-          _this.searchInfo.phone = ''
+          _this.searchInfo.name = '',
+
           this.disabledFlag = false
-          this.$axios.get(`/member/paging/0/5`).then(resp => {
+          this.$axios.get(`/cate/paging/0/5`).then(resp => {
             console.log(this.currentPage);
             
             if (resp && resp.status === 200) {
               _this.resData = resp.data
-              _this.members = _this.resData.content
+              _this.cates = _this.resData.content
               _this.totalElements = _this.resData.totalElements
               _this.pagesize = _this.resData.size
               // console.log( _this.members); 
@@ -216,33 +215,32 @@
         },
         handleSearch(){
           var _this = this
-          if(this.searchInfo.truename != null || this.searchInfo.memberno != null || this.searchInfo.phone != null){
-            console.log(this.searchInfo.truename, this.searchInfo.memberno, this.searchInfo.phone);
-            this.$axios.post(`/member/searchInfo`,{
-              truename: this.searchInfo.truename,
-              memberno: this.searchInfo.memberno,
-              phone: this.searchInfo.phone
+          if(this.searchInfo.name != null){
+            console.log(this.searchInfo.name);
+            this.$axios.post(`/cate/searchInfo`,{
+              id: this.searchInfo.id,
+              name: this.searchInfo.name
             }).then(resp => {
               if(resp && resp.status === 200 && Number(resp.data) != 0){
-                _this.members = resp.data
+                _this.cates = resp.data
                 _this.totalElements = resp.data.length
                 _this.pagesize = resp.data.length
                 _this.disabledFlag = true
                 // console.log(111111,resp.data);
               }else{
-                _this.members = []
+                _this.cates = []
               }
             })
             // console.log(this.searchInfo.truename);
           }
         },
-        listMembers () {
+        listCates () {
           var _this = this
-          this.$axios.get(`/member/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
+          this.$axios.get(`/cate/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
               _this.resData = resp.data
-              _this.members = _this.resData.content
+              _this.cates = _this.resData.content
               _this.totalElements = _this.resData.totalElements
               _this.pagesize = _this.resData.size
               // console.log( _this.members); 
@@ -257,22 +255,22 @@
         //     }
         //   })
         // },
-        commitStatusChange (value, member) {
-          this.$axios.put('/member/status', {
+        commitStatusChange (value, cate) {
+          this.$axios.put('/cate/status', {
             enabled: value,
-            membername: member.membername,
-            memberno: member.memberno
+            id: cate.id,
+            name: cate.name,
           }).then(resp => {
             if (resp && resp.status === 200) {
               if (value) {
-                this.$message('用户 [' + member.membername + '] 已启用')
+                this.$message('类型 [' + cate.name + '] 已启用')
               } else {
-                this.$message('用户 [' + member.membername + '] 已禁用')
+                this.$message('用户 [' + cate.name + '] 已禁用')
               }
             }
           })
         },
-        onSubmit (selectedMember) {
+        onSubmit (selectedCate) {
           // let _this = this
           // // 根据视图绑定的角色 id 向后端传送角色信息
           // let roles = []
@@ -284,20 +282,15 @@
           //   }
           // }
           let _this = this
-          this.$axios.put('/member/update',{
-            id: selectedMember.id,
-            memberno: selectedMember.memberno,
-            membername: selectedMember.membername,
-            truename: selectedMember.truename,
-            phone: selectedMember.phone,
-            email: selectedMember.email,
-            memberaddr: selectedMember.memberaddr
+          this.$axios.put('/cate/update',{
+            id: selectedCate.id,
+            name: selectedCate.name,
           }).then(resp => {
             if (resp && resp.status === 200) {
               this.$alert('用户信息修改成功')
               this.dialogFormVisible = false
               // 修改角色后重新请求用户信息，实现视图更新
-              this.listMembers()
+              this.listCates()
             }
           }).catch((failResponse) => {
             this.$alert('发生错误', '提示', {
@@ -305,29 +298,29 @@
             })
           })
         },
-        editMembers (member) {
+        editCate (cate) {
           this.dialogFormVisible = true
-          this.selectedMember = member
+          this.selectedCate = cate
           // let roleIds = []
           // for (let i = 0; i < user.roles.length; i++) {
           //   roleIds.push(user.roles[i].id)
           // }
           // this.selectedRolesIds = roleIds
         },
-        deleteMembers(member){
+        deleteCate(cate){
           this.$confirm('确定删除？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
             let _this = this
-            this.$axios.delete(`/member/deleteMember/${member.id}`,{
+            this.$axios.delete(`/cate/deleteCate/${cate.id}`,{
             }).then(resp => {
             if (resp.data.code === 200) {
               this.$alert(resp.data.data, '提示', {
                 confirmButtonText: '确定'
               })
-              this.listMembers()
+              this.listCates()
             } else {
               this.$alert(resp.data.message, '提示', {
                 confirmButtonText: '确定'
