@@ -3,7 +3,7 @@
     <side-menu  id="side-menu"/>
     <div class="home">
       <div id="header-div">
-        <div style="height: 150px"></div>
+        <div style=""></div>
         <!-- <quick-nav style="float: right;margin-top: -220px;margin-right: 480px"></quick-nav> -->
         <carousel id="carousel"/>
       </div>

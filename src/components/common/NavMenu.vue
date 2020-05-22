@@ -14,7 +14,7 @@
           {{ item.navItem }}
       </el-menu-item>
       <span style="position: absolute; padding-top: 20px;right:28%;font-size: 20px;font-weight: bold">
-        女娲未来科技-生活大厦
+        女娲未来科技-门店管理
       </span>
       <el-input
         placeholder="快速搜索..."
@@ -35,7 +35,7 @@ export default {
       return {
         navList: [
           {name: '/index', navItem: '首页'},
-          {name: '/shopindex', navItem: '店铺'},
+          {name: '/jotter', navItem: '公告'},
           {name: '/commodityindex', navItem: '商品'},
           // {name: '/shopcart', navItem: '购物车'},
           // {name: '/bought', navItem: '购买历史'},

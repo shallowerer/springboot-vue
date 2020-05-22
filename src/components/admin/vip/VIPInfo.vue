@@ -45,9 +45,9 @@
     <bulk-registration @onSubmit="listMembers()"></bulk-registration>
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
-      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.truename" placeholder="会员真名"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.memberno" placeholder="会员编号"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="会员手机号"></el-input>
+      <el-input style="width:250px;margin-right:30px;" v-model="truename" placeholder="会员真名"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="memberno" placeholder="会员编号"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="phone" placeholder="会员手机号"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
     </div>
@@ -171,7 +171,11 @@
             dialogFormVisible: false,
             selectedMember: [],
             selectedRolesIds: [],
-            searchInfo: []
+            searchInfo: [],
+            truename: '',
+            memberno: '',
+            phone: ''
+            
           }
       },
       mounted () {
@@ -198,9 +202,9 @@
         },
         returnList(){
           var _this = this
-          _this.searchInfo.truename = '',
-          _this.searchInfo.memberno = '',
-          _this.searchInfo.phone = ''
+          _this.truename = '',
+          _this.memberno = '',
+          _this.phone = ''
           this.disabledFlag = false
           this.$axios.get(`/member/paging/0/5`).then(resp => {
             console.log(this.currentPage);
@@ -216,12 +220,12 @@
         },
         handleSearch(){
           var _this = this
-          if(this.searchInfo.truename != null || this.searchInfo.memberno != null || this.searchInfo.phone != null){
-            console.log(this.searchInfo.truename, this.searchInfo.memberno, this.searchInfo.phone);
+          if(this.truename != null || this.memberno != null || this.phone != null){
+            console.log(this.truename, this.memberno, this.phone);
             this.$axios.post(`/member/searchInfo`,{
-              truename: this.searchInfo.truename,
-              memberno: this.searchInfo.memberno,
-              phone: this.searchInfo.phone
+              truename: this.truename,
+              memberno: this.memberno,
+              phone: this.phone
             }).then(resp => {
               if(resp && resp.status === 200 && Number(resp.data) != 0){
                 _this.members = resp.data

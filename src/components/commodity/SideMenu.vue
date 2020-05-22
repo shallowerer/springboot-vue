@@ -6,31 +6,31 @@
     style="width: 200px">
     <el-menu-item index="0">
       <i class="el-icon-menu"></i>
-      <span slot="title">综合类</span>
+      <span slot="title">全部</span>
     </el-menu-item>
     <el-menu-item index="1">
       <i class="el-icon-menu"></i>
-      <span slot="title">试衣阁</span>
+      <span slot="title">衣服</span>
     </el-menu-item>
     <el-menu-item index="2">
       <i class="el-icon-menu"></i>
-      <span slot="title">生鲜亭</span>
+      <span slot="title">生鲜</span>
     </el-menu-item>
     <el-menu-item index="3">
       <i class="el-icon-menu"></i>
-      <span slot="title">玩具城</span>
+      <span slot="title">玩具</span>
     </el-menu-item>
     <el-menu-item index="4">
       <i class="el-icon-menu"></i>
-      <span slot="title">五金店</span>
+      <span slot="title">裤子</span>
     </el-menu-item>
     <el-menu-item index="5">
       <i class="el-icon-menu"></i>
-      <span slot="title">家电层</span>
+      <span slot="title">帽子</span>
     </el-menu-item>
     <el-menu-item index="6">
       <i class="el-icon-menu"></i>
-      <span slot="title">家具城</span>
+      <span slot="title">饰品</span>
     </el-menu-item>
         <el-menu-item index="7">
       <i class="el-icon-menu"></i>

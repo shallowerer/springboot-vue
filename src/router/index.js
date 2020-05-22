@@ -5,6 +5,9 @@ import AppIndex from '../components/home/AppIndex'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import User from '../views/User'
+import Articles from '../components/jotter/Articles'
+import Editor from '../components/admin/content/ArticleEditor'
+import ArticleDetails from '../components/jotter/ArticleDetails'
 
 
 // import Container from '../components/admin/Container'
@@ -43,6 +46,24 @@ export default new VueRouter({
           path: '/index',
           name: 'AppIndex',
           component: AppIndex,
+        },
+        {
+          path: '/jotter',
+          name: 'Jotter',
+          component: Articles
+        },
+        {
+          path: '/jotter/article',
+          name: 'Article',
+          component: ArticleDetails
+        },
+        {
+          path: '/admin/content/editor',
+          name: 'Editor',
+          component: Editor,
+          meta: {
+            requireAuth: true
+          }
         },
         
         {
@@ -145,6 +166,24 @@ export const createRouter = routes => new Router({
           name: 'AppIndex',
           component: AppIndex,
 
+        },
+        {
+          path: '/jotter',
+          name: 'Jotter',
+          component: Articles
+        },
+        {
+          path: '/jotter/article',
+          name: 'Article',
+          component: ArticleDetails
+        },
+        {
+          path: '/admin/content/editor',
+          name: 'Editor',
+          component: Editor,
+          meta: {
+            requireAuth: true
+          }
         },
         
         {
