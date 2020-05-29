@@ -68,40 +68,46 @@
           prop="id"
           label="id"
           sortable
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="memberno"
-          label="会员编号"
           fit>
         </el-table-column>
         <el-table-column
-          prop="membername"
-          label="会员昵称"
+          prop="orderNo"
+          label="订单编号"
           fit>
         </el-table-column>
         <el-table-column
-          prop="truename"
-          label="真实姓名"
+          prop="totalPrice"
+          label="总价格￥"
           fit>
         </el-table-column>
         <el-table-column
-          prop="phone"
-          label="手机号"
+          prop="orderTime"
+          label="订单详细时间"
           fit>
         </el-table-column>
         <el-table-column
-          prop="email"
-          label="邮箱"
+          prop="uid"
+          label="操作人标识"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="配送地址"
           show-overflow-tooltip
           fit>
         </el-table-column>
         <el-table-column
-          prop="memberaddr"
-          label="会员地址"
+          prop="payStatus"
+          label="支付状态"
           fit>
         </el-table-column>
         <el-table-column
+          prop="mid"
+          label="下单会员标识"
+          fit>
+        </el-table-column>
+
+        <!-- <el-table-column
           label="状态"
           sortable
           width="100">
@@ -113,7 +119,7 @@
               @change="(value) => commitStatusChange(value, scope.row)">
             </el-switch>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         
         <el-table-column
           label="操作"
@@ -238,9 +244,11 @@
         },
         listMembers () {
           var _this = this
-          this.$axios.get(`/member/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
+          this.$axios.get(`/commodityOrder/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
+              console.log(resp);
+              
               _this.resData = resp.data
               _this.members = _this.resData.content
               _this.totalElements = _this.resData.totalElements

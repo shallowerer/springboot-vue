@@ -2,30 +2,31 @@
   <div>
     <!-- （编辑）修改信息弹框 -->
     <el-dialog
-      title="修改会员信息"
+      title="修改供应商信息"
       :visible.sync="dialogFormVisible">
       <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
-        <el-form-item label="会员标识" label-width="120px" prop="id">
+        <el-form-item label="供应商id" label-width="120px" prop="id">
           <label>{{selectedMember.id}}</label>
         </el-form-item>
-        <el-form-item label="会员编号" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.memberno" autocomplete="off"></el-input>
+
+        
+        <el-form-item label="供应商编号" label-width="120px" prop="no">
+          <el-input v-model="selectedMember.no" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="会员昵称" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.membername" autocomplete="off"></el-input>
+
+        <el-form-item label="供应商名称" label-width="120px" prop="name">
+          <el-input v-model="selectedMember.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="真实姓名" label-width="120px" prop="phone">
-          <el-input v-model="selectedMember.truename" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码" label-width="120px" prop="email">
+        <el-form-item label="供应商电话" label-width="120px" prop="phone">
           <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" label-width="120px" prop="email">
+        <el-form-item label="供应商邮箱" label-width="120px" prop="email">
+          <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商地址" label-width="120px" prop="addr">
           <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="地址" label-width="120px" prop="password">
-          <el-input v-model="selectedMember.memberaddr" autocomplete="off"></el-input>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -36,8 +37,8 @@
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>会员管理</el-breadcrumb-item>
-        <el-breadcrumb-item>会员信息</el-breadcrumb-item>
+        <el-breadcrumb-item>上游管理</el-breadcrumb-item>
+        <el-breadcrumb-item>供应商信息</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
 
@@ -45,9 +46,9 @@
     <bulk-registration @onSubmit="listMembers()"></bulk-registration>
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
-      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.truename" placeholder="会员真名"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.memberno" placeholder="会员编号"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="会员手机号"></el-input>
+      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.name" placeholder="供应商名称"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.addr" placeholder="供应商地址"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="供应商手机号"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
     </div>
@@ -71,18 +72,13 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="memberno"
-          label="会员编号"
+          prop="no"
+          label="供应商编号"
           fit>
         </el-table-column>
         <el-table-column
-          prop="membername"
-          label="会员昵称"
-          fit>
-        </el-table-column>
-        <el-table-column
-          prop="truename"
-          label="真实姓名"
+          prop="name"
+          label="供应商名称"
           fit>
         </el-table-column>
         <el-table-column
@@ -97,8 +93,8 @@
           fit>
         </el-table-column>
         <el-table-column
-          prop="memberaddr"
-          label="会员地址"
+          prop="addr"
+          label="供应商地址"
           fit>
         </el-table-column>
         <el-table-column
@@ -238,7 +234,7 @@
         },
         listMembers () {
           var _this = this
-          this.$axios.get(`/member/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
+          this.$axios.get(`/supplier/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
               _this.resData = resp.data
@@ -258,10 +254,10 @@
         //   })
         // },
         commitStatusChange (value, member) {
-          this.$axios.put('/member/status', {
+          this.$axios.put('/supplier/status', {
             enabled: value,
-            membername: member.membername,
-            memberno: member.memberno
+            name: member.name,
+            no: member.No
           }).then(resp => {
             if (resp && resp.status === 200) {
               if (value) {

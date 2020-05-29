@@ -2,7 +2,7 @@
   <div>
     <!-- （编辑）修改信息弹框 -->
     <el-dialog
-      title="修改会员信息"
+      title="修改评论信息"
       :visible.sync="dialogFormVisible">
       <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
         <el-form-item label="会员标识" label-width="120px" prop="id">
@@ -71,37 +71,50 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="memberno"
-          label="会员编号"
+          prop="no"
+          label="评论编号"
           fit>
         </el-table-column>
         <el-table-column
-          prop="membername"
-          label="会员昵称"
+          prop="name"
+          label="评论人"
           fit>
         </el-table-column>
         <el-table-column
-          prop="truename"
-          label="真实姓名"
+          prop="givetime"
+          label="评论时间"
           fit>
         </el-table-column>
+
         <el-table-column
-          prop="phone"
-          label="手机号"
-          fit>
-        </el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱"
+          prop="servicestar"
+          label="服务评分"
           show-overflow-tooltip
           fit>
         </el-table-column>
         <el-table-column
-          prop="memberaddr"
-          label="会员地址"
+          prop="costar"
+          label="商品评分"
           fit>
         </el-table-column>
         <el-table-column
+          prop="roomstar"
+          label="环境评分"
+          fit>
+        </el-table-column>
+        <el-table-column type="expand"
+          prop="givecontent"
+          label="评论内容"
+          fit>
+          <template slot-scope="props">
+            <el-form label-position="left" inline>
+              <el-form-item>
+                <span>{{ props.row.givecontent }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
           label="状态"
           sortable
           width="100">
@@ -113,7 +126,7 @@
               @change="(value) => commitStatusChange(value, scope.row)">
             </el-switch>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         
         <el-table-column
           label="操作"
@@ -238,7 +251,7 @@
         },
         listMembers () {
           var _this = this
-          this.$axios.get(`/member/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
+          this.$axios.get(`/comment/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
               _this.resData = resp.data
