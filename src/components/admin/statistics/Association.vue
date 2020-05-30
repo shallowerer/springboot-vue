@@ -94,6 +94,7 @@
         <el-table-column
           prop="p"
           label="关联度"
+          sortable
           fit>
         </el-table-column>
 

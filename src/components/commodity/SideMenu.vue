@@ -10,27 +10,27 @@
     </el-menu-item>
     <el-menu-item index="1">
       <i class="el-icon-menu"></i>
-      <span slot="title">衣服</span>
+      <span slot="title">整件装</span>
     </el-menu-item>
     <el-menu-item index="2">
       <i class="el-icon-menu"></i>
-      <span slot="title">生鲜</span>
+      <span slot="title">套装</span>
     </el-menu-item>
     <el-menu-item index="3">
       <i class="el-icon-menu"></i>
-      <span slot="title">玩具</span>
+      <span slot="title">外套</span>
     </el-menu-item>
     <el-menu-item index="4">
       <i class="el-icon-menu"></i>
-      <span slot="title">裤子</span>
+      <span slot="title">背心</span>
     </el-menu-item>
     <el-menu-item index="5">
       <i class="el-icon-menu"></i>
-      <span slot="title">帽子</span>
+      <span slot="title">裙</span>
     </el-menu-item>
     <el-menu-item index="6">
       <i class="el-icon-menu"></i>
-      <span slot="title">饰品</span>
+      <span slot="title">裤</span>
     </el-menu-item>
         <el-menu-item index="7">
       <i class="el-icon-menu"></i>

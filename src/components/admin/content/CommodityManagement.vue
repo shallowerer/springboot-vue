@@ -12,7 +12,7 @@
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
       <el-input style="width:250px;margin-right:30px;" v-model="cname" placeholder="商品名称"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="cno" placeholder="商品编号"></el-input>
+      <!-- <el-input style="width:250px;margin-right:30px;"  v-model="cno" placeholder="商品编号"></el-input> -->
       <el-input style="width:250px;margin-right:30px;"  v-model="ctime" placeholder="上架日期"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
@@ -233,9 +233,9 @@
       //返回所有数据
       returnList(){
         var _this = this
-        _this.truename = '',
-        _this.memberno = '',
-        _this.phone = ''
+        _this.cname = ''
+        _this.cno = ''
+        _this.ctime = ''
         this.disabledFlag = false
         this.$axios.get(`/paging/0/5`).then(resp => {
           // console.log(this.currentPage);
@@ -254,20 +254,20 @@
         var _this = this
         if(this.cname != null || this.cno != null || this.ctime != null){
           console.log(this.cname, this.cno, this.ctime);
-          this.$axios.post(`/commodity/searchInfo`,{
-            cname: _this.cname,
-            cno: _this.cno,
-            cdate: _this.cdate
-          }).then(resp => {
+          this.$axios.get(`/commodity/searchInfo?cname=${_this.cname}&cno=${_this.cno}&cdate=${_this.ctime}`).then(resp => {
             if(resp && resp.status === 200 && Number(resp.data) != 0){
-              _this.members = resp.data
+              _this.commodities = resp.data
               _this.totalElements = resp.data.length
               _this.pagesize = resp.data.length
               _this.disabledFlag = true
+
               // console.log(111111,resp.data);
             }else{
-              _this.members = []
+              _this.commodities = []
             }
+            _this.cname = '',
+            _this.cno = '',
+            _this.ctime = ''
           })
           // console.log(this.searchInfo.truename);
         }

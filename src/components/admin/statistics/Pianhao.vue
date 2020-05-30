@@ -35,7 +35,7 @@
       <div class="el-card__body" >
         <div class="echart-sheet">
         <!--条形图-->
-          <div id="allsh" style="width:80%; height: 400px;margin:0 auto"></div>
+          <div id="allph" style="width:90%; height: 400px;margin:0 auto"></div>
         </div>
       </div>
     </el-card>
@@ -122,6 +122,7 @@
 </template>
 
 <script>
+import echarts from 'echarts'
 export default {
   data(){
     return{
@@ -131,7 +132,9 @@ export default {
       allPianhao:[],
       memberInfo:[],
       memberlove:[],
-      memberPianhao:[]
+      memberPianhao:[],
+
+      allph:[]
     }
   },
   mounted () {
@@ -148,7 +151,11 @@ export default {
           _this.allPianhao = resp.data
           _this.memberlove =   resp.data[0].memberlove
           _this.memberInfo =   resp.data[0].memberInfo
-          // console.log( resp.data[0].memberInfo); 
+          
+          console.table( resp.data[0].memberlove);
+          _this.$nextTick(function() {
+            _this.drawPie3('allph')
+          })  
         }
       })  
     },
@@ -158,18 +165,104 @@ export default {
       if(typeof Number(this.input1) == 'number'){
         this.$axios.get(`/oneMemberPianhao/${_this.input1}`).then(resp => {
           if (resp && resp.status === 200) {
-          // console.log(resp.data);
+            // console.log(resp.data);
             _this.memberInfo = resp.data[0].menberInfo
             _this.memberlove =   resp.data[0].memberlove
-            console.log(_this.memberInfo);  
+            // console.log(_this.memberlove);
+            _this.$nextTick(function() {
+              _this.drawPie3('allph')
+            })  
           }
         }) 
       }else{
+      }             
+    },
 
-      }
-
-             
-    }
+    drawPie3(id) {
+      let _this = this
+      this.charts = echarts.init(document.getElementById(id))
+      this.charts.setOption({
+        title: {
+          text: '',
+          subtext: '',
+          x:'center'
+        },
+        tooltip : {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+            // backgroundColor: '#2c343c',
+        legend: {
+          // data: ['ddd','ddd','ddd','ddd']
+          // selectedMode: false // 取消图例点击动态效果
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        series: [
+          {
+            name: '总购买次数',
+            type: 'pie',
+            radius: '45%',
+            roseType: 'angle',
+            center: ['20%', '50%'],
+            data:(function () {
+              var arrNum = [];
+              var temp = _this.memberlove;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push({"value": temp[i].times,"name":temp[i].commodityName});
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
+          },
+           {
+            name: '总购买数量',
+            type: 'pie',
+            radius: '45%',
+            roseType: 'angle',
+            center: ['50%', '50%'],
+            data:(function () {
+              var arrNum = [];
+              var temp = _this.memberlove;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push({"value": temp[i].allamount,"name":temp[i].commodityName});
+                // console.log(arrNum);
+              }
+              return arrNum;
+            })()
+          },
+           {
+            name: '总消费额',
+            type: 'pie',
+            radius: '45%',
+            roseType: 'angle',
+            center: ['80%', '50%'],
+            data:(function () {
+              var arrNum = [];
+              var temp = _this.memberlove;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push({"value": temp[i].totalmoney,"name":temp[i].commodityName});
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
+          },
+        ]      
+      })
+    },
   }
 
 }

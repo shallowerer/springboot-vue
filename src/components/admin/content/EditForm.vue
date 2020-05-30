@@ -27,12 +27,12 @@
         </el-form-item>
         <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
         <el-select v-model="form.category.id" placeholder="请选择分类">
-          <el-option label="试衣阁" value="1"></el-option>
-          <el-option label="生鲜亭" value="2"></el-option>
-          <el-option label="玩具城" value="3"></el-option>
-          <el-option label="五金店" value="4"></el-option>
-          <el-option label="家电层" value="5"></el-option>
-          <el-option label="家具层" value="6"></el-option>
+          <el-option label="整件装" value="1"></el-option>
+          <el-option label="套装" value="2"></el-option>
+          <el-option label="外套" value="3"></el-option>
+          <el-option label="背心" value="4"></el-option>
+          <el-option label="裙" value="5"></el-option>
+          <el-option label="裤" value="6"></el-option>
           <el-option label="其他" value="7"></el-option>
         </el-select>
         </el-form-item>
