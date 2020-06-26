@@ -86,7 +86,7 @@
       return {
         articles: [],
         pageSize: 10,
-        total: ''
+        total: 1
       }
     },
     mounted () {

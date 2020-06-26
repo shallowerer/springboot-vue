@@ -3,8 +3,8 @@
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard'}">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/admin/content/book'}">内容管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/admin/content/article'}">文章管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/admin/content/book'}">门店管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/admin/content/article'}">公告管理</el-breadcrumb-item>
         <el-breadcrumb-item>编辑器</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
@@ -39,10 +39,10 @@
           <el-input v-model="article.articleCover" autocomplete="off" placeholder="图片 URL"></el-input>
           <img-upload @onUpload="uploadImg" ref="imgUpload" style="margin-top: 5px"></img-upload>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-        </span>
+        </div>
       </el-dialog>
     </el-row>
   </div>
@@ -50,10 +50,12 @@
 
 <script>
   import ImgUpload from './ImgUpload'
-
   export default {
     name: 'Editor',
-    components: {ImgUpload},
+    components: {
+      ImgUpload,
+      
+    },
     data () {
       return {
         article: {},
@@ -68,11 +70,12 @@
     methods: {
       saveArticles (value, render) {
         // value 是 md，render 是 html
-        this.$confirm('是否保存并发布文章?', '提示', {
+        this.$confirm('是否保存并发布?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+            this.dialogVisible = false
             this.$axios
               .post('/admin/content/article', {
                 id: this.article.id,

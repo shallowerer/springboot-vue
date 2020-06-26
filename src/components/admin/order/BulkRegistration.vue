@@ -1,38 +1,39 @@
 <template>
   <div style="text-align: left">
-    <el-button class="add-button" type="success" @click="dialogFormVisible = true">批量添加订单</el-button>
+    <el-button class="add-button" type="success" @click="dialogFormVisible = true">添加明细</el-button>
     
     <el-dialog
-      title="添加订单"
+      title="添加明细"
       :visible.sync="dialogFormVisible"
       @close="clear"
       width="25%">
       <el-form :model="loginForm" :rules="rules" label-position="left"
                label-width="0px">
-        <el-form-item prop="memberno">
-          <el-input type="text" v-model="loginForm.memberno"
-                    auto-complete="off" placeholder="编号"></el-input>
-        </el-form-item>
-        <el-form-item prop="membername">
-          <el-input type="text" v-model="loginForm.membername"
-                    auto-complete="off" placeholder="昵称"></el-input>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.orderNo"
+                    auto-complete="off" placeholder="订单编号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.truename"
-                    auto-complete="off" placeholder="真实姓名"></el-input>
+          <el-input type="text" v-model="loginForm.commodityId"
+                    auto-complete="off" placeholder="商品id"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.phone"
-                    auto-complete="off" placeholder="电话号码"></el-input>
+          <el-input type="text" v-model="loginForm.commodityName"
+                    auto-complete="off" placeholder="商品名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.email"
-                    auto-complete="off" placeholder="邮箱"></el-input>
+          <el-input type="text" v-model="loginForm.price"
+                    auto-complete="off" placeholder="价格"></el-input>
         </el-form-item>
-         <el-form-item>
-          <el-input type="text" v-model="loginForm.memberaddr"
-                    auto-complete="off" placeholder="地址"></el-input>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.amount"
+                    auto-complete="off" placeholder="数量"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.lttAccount"
+                    auto-complete="off" placeholder="小计"></el-input>
+        </el-form-item>
+        
         <el-form-item style="width: 100%">
           <el-button type="primary" style="width: 40%;background: #505458;border: none" v-on:click="addMember">添加</el-button>
         </el-form-item>
@@ -53,35 +54,35 @@
             memberaddr: [{required: true, message: '地址不能为空', trigger: 'blur'}]
           },
           loginForm: {
-            memberno: '',
-            membername: '',
-            truename: '',
-            phone: '',
-            email: '',
-            memberaddr: ''
+            orderNo: '',
+            commodityId: '',
+            commodityName: '',
+            amount: '',
+            price: '',
+            lttAccount: ''
           }
         }
       },
       methods: {
         clear () {
           this.loginForm = {
-            memberno: '',
-            membername: '',
-            truename: '',
-            phone: '',
-            email: '',
-            memberaddr: ''
+            orderNo: '',
+            commodityId: '',
+            commodityName: '',
+            amount: '',
+            price: '',
+            lttAccount: ''
           }
         },
         addMember () {
           this.$axios
-            .post('/addMember', {
-              memberno: this.loginForm.memberno,
-              membername: this.loginForm.membername,
-              truename: this.loginForm.truename,
-              phone: this.loginForm.phone,
-              email: this.loginForm.email,
-              memberaddr: this.loginForm.memberaddr,
+            .post('/addOrderItem', {
+              orderId: this.loginForm.orderNo,
+              commodityId: this.loginForm.commodityId,
+              commodityName: this.loginForm.commodityName,
+              amount: this.loginForm.amount,
+              price: this.loginForm.price,
+              lttAccount: this.loginForm.lttAccount,
             })
             .then(resp => {
               if (resp.data.code === 200) {

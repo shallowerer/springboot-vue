@@ -14,7 +14,7 @@
                     auto-complete="off" placeholder="编号"></el-input>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input type="password" v-model="loginForm.name"
+          <el-input type="text" v-model="loginForm.name"
                     auto-complete="off" placeholder="供应商名字"></el-input>
         </el-form-item>
         <el-form-item>
@@ -70,11 +70,11 @@
         register () {
           this.$axios
             .post('/addSupplier', {
-              no: this.loginForm.username,
-              name: this.loginForm.password,
-              addr: this.loginForm.truename,
+              no: this.loginForm.no,
+              name: this.loginForm.name,
               phone: this.loginForm.phone,
-              email: this.loginForm.email
+              email: this.loginForm.email,
+              addr: this.loginForm.addr
             })
             .then(resp => {
               if (resp.data.code === 200) {

@@ -5,30 +5,34 @@
       title="修改评论信息"
       :visible.sync="dialogFormVisible">
       <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
-        <el-form-item label="会员标识" label-width="120px" prop="id">
+        <el-form-item label="标识" label-width="120px" prop="id">
           <label>{{selectedMember.id}}</label>
         </el-form-item>
-        <el-form-item label="会员编号" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.memberno" autocomplete="off"></el-input>
+        <el-form-item label="评论编号" label-width="120px" prop="no">
+          <el-input v-model="selectedMember.no" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="会员昵称" label-width="120px" prop="name">
-          <el-input v-model="selectedMember.membername" autocomplete="off"></el-input>
+        <el-form-item label="评论人" label-width="120px" prop="name">
+          <el-input v-model="selectedMember.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="真实姓名" label-width="120px" prop="phone">
-          <el-input v-model="selectedMember.truename" autocomplete="off"></el-input>
+        <el-form-item label="评论时间" label-width="120px" prop="givetime">
+          <el-input v-model="selectedMember.givetime" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" label-width="120px" prop="email">
-          <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
+        <el-form-item label="服务得分" label-width="120px" prop="servicestar">
+          <el-input v-model="selectedMember.servicestar" type="number"  :max="5" :min="1" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" label-width="120px" prop="email">
-          <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
+        <el-form-item label="商品得分" label-width="120px" prop="costar">
+          <el-input v-model="selectedMember.costar" type="number"  :max="5" :min="1" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="地址" label-width="120px" prop="password">
-          <el-input v-model="selectedMember.memberaddr" autocomplete="off"></el-input>
+        <el-form-item label="环境得分" label-width="120px" prop="roomstar">
+          <el-input v-model="selectedMember.roomstar" type="number"  :max="5" :min="1" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="评论内容" label-width="120px" prop="givecontent">
+          <el-input v-model="selectedMember.givecontent" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="dialogFormVisible = false;listMembers()">取 消</el-button>
         <el-button type="primary" @click="onSubmit(selectedMember)">确 定</el-button>
       </div>
     </el-dialog>
@@ -36,8 +40,8 @@
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>会员管理</el-breadcrumb-item>
-        <el-breadcrumb-item>会员信息</el-breadcrumb-item>
+        <el-breadcrumb-item>评论管理</el-breadcrumb-item>
+        <el-breadcrumb-item>评论信息</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
 
@@ -45,9 +49,9 @@
     <bulk-registration @onSubmit="listMembers()"></bulk-registration>
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
-      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.truename" placeholder="会员真名"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.memberno" placeholder="会员编号"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="会员手机号"></el-input>
+      <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.name" placeholder="评论人名"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.givetime" placeholder="评论时间"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.givecontent" placeholder="评论内容"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
     </div>
@@ -211,11 +215,12 @@
         },
         returnList(){
           var _this = this
-          _this.searchInfo.truename = '',
-          _this.searchInfo.memberno = '',
-          _this.searchInfo.phone = ''
+          // _this.searchInfo.name = '',
+          // _this.searchInfo.givetime = '',
+          // _this.searchInfo.givecontent = ''
+          _this.searchInfo=[]
           this.disabledFlag = false
-          this.$axios.get(`/member/paging/0/5`).then(resp => {
+          this.$axios.get(`/comment/paging/0/5`).then(resp => {
             console.log(this.currentPage);
             
             if (resp && resp.status === 200) {
@@ -229,12 +234,12 @@
         },
         handleSearch(){
           var _this = this
-          if(this.searchInfo.truename != null || this.searchInfo.memberno != null || this.searchInfo.phone != null){
-            console.log(this.searchInfo.truename, this.searchInfo.memberno, this.searchInfo.phone);
-            this.$axios.post(`/member/searchInfo`,{
-              truename: this.searchInfo.truename,
-              memberno: this.searchInfo.memberno,
-              phone: this.searchInfo.phone
+          if(this.searchInfo.name != null || this.searchInfo.givetime != null || this.searchInfo.givecontent != null){
+            console.log(this.searchInfo);
+            this.$axios.post(`/comment/searchInfo`,{
+              name: this.searchInfo.name,
+             
+              givecontent: this.searchInfo.givecontent
             }).then(resp => {
               if(resp && resp.status === 200 && Number(resp.data) != 0){
                 _this.members = resp.data
@@ -270,21 +275,21 @@
         //     }
         //   })
         // },
-        commitStatusChange (value, member) {
-          this.$axios.put('/member/status', {
-            enabled: value,
-            membername: member.membername,
-            memberno: member.memberno
-          }).then(resp => {
-            if (resp && resp.status === 200) {
-              if (value) {
-                this.$message('用户 [' + member.membername + '] 已启用')
-              } else {
-                this.$message('用户 [' + member.membername + '] 已禁用')
-              }
-            }
-          })
-        },
+        // commitStatusChange (value, member) {
+        //   this.$axios.put('/member/status', {
+        //     enabled: value,
+        //     membername: member.membername,
+        //     memberno: member.memberno
+        //   }).then(resp => {
+        //     if (resp && resp.status === 200) {
+        //       if (value) {
+        //         this.$message('用户 [' + member.membername + '] 已启用')
+        //       } else {
+        //         this.$message('用户 [' + member.membername + '] 已禁用')
+        //       }
+        //     }
+        //   })
+        // },
         onSubmit (selectedMember) {
           // let _this = this
           // // 根据视图绑定的角色 id 向后端传送角色信息
@@ -297,17 +302,18 @@
           //   }
           // }
           let _this = this
-          this.$axios.put('/member/update',{
+          this.$axios.put('/comment/update',{
             id: selectedMember.id,
-            memberno: selectedMember.memberno,
-            membername: selectedMember.membername,
-            truename: selectedMember.truename,
-            phone: selectedMember.phone,
-            email: selectedMember.email,
-            memberaddr: selectedMember.memberaddr
+            no: selectedMember.no,
+            name: selectedMember.name,
+            givetime: selectedMember.givetime,
+            servicestar: selectedMember.servicestar,
+            costar: selectedMember.costar,
+            roomstar: selectedMember.roomstar,
+            givecontent: selectedMember.givecontent
           }).then(resp => {
             if (resp && resp.status === 200) {
-              this.$alert('用户信息修改成功')
+              this.$alert('信息修改成功')
               this.dialogFormVisible = false
               // 修改角色后重新请求用户信息，实现视图更新
               this.listMembers()
@@ -334,7 +340,7 @@
             type: 'warning'
           }).then(() => {
             let _this = this
-            this.$axios.delete(`/member/deleteMember/${member.id}`,{
+            this.$axios.delete(`/comment/deleteMember/${member.id}`,{
             }).then(resp => {
             if (resp.data.code === 200) {
               this.$alert(resp.data.data, '提示', {

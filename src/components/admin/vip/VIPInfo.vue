@@ -23,12 +23,44 @@
         <el-form-item label="邮箱" label-width="120px" prop="email">
           <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="地址" label-width="120px" prop="password">
+        <el-form-item label="个人说明" label-width="120px" prop="password">
           <el-input v-model="selectedMember.memberaddr" autocomplete="off"></el-input>
         </el-form-item>
+
+        <el-form-item label="省" label-width="120px" prop="province">
+          <el-input v-model="selectedMember.province" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="市" label-width="120px" prop="city">
+          <el-input v-model="selectedMember.city" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="区" label-width="120px" prop="area">
+          <el-input v-model="selectedMember.area" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="镇(街道)" label-width="120px" prop="town">
+          <el-input v-model="selectedMember.town" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="村(路)" label-width="120px" prop="road">
+          <el-input v-model="selectedMember.road" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="屯(小区)" label-width="120px" prop="password">
+          <el-input v-model="selectedMember.myfloor" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" label-width="120px" prop="sex">
+          <el-input v-model="selectedMember.sex" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄" label-width="120px" prop="age">
+          <el-input v-model="selectedMember.age" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" label-width="120px" prop="account">
+          <el-input v-model="selectedMember.account" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" label-width="120px" prop="password">
+          <el-input v-model="selectedMember.password" autocomplete="off"></el-input>
+        </el-form-item>
+        
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="dialogFormVisible = false;listMembers()">取 消</el-button>
         <el-button type="primary" @click="onSubmit(selectedMember)">确 定</el-button>
       </div>
     </el-dialog>
@@ -96,11 +128,55 @@
           show-overflow-tooltip
           fit>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="memberaddr"
-          label="会员地址"
+          label="个人说明"
+          fit>
+        </el-table-column> -->
+
+
+        <el-table-column
+          prop="province"
+          label="省"
           fit>
         </el-table-column>
+        <el-table-column
+          prop="city"
+          label="市"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="area"
+          label="区"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="town"
+          label="镇(街道)"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="road"
+          label="村"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="myfloor"
+          label="小区"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="sex"
+          label="性别"
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="age"
+          label="年龄"
+          fit>
+        </el-table-column>
+
+
         <el-table-column
           label="状态"
           sortable
@@ -130,6 +206,12 @@
               type="text"
               size="small">
               移除
+            </el-button>
+            <el-button
+              @click="toMemberLove(scope.row)"
+              type="text"
+              size="small">
+              偏好
             </el-button>
           </template>
         </el-table-column>
@@ -178,6 +260,7 @@
             
           }
       },
+
       mounted () {
         this.listMembers()
         // this.listRoles()
@@ -188,6 +271,9 @@
         }
       },
       methods: {
+        toMemberLove(member){
+          this.$router.push({path: '/admin/vip/vip_bill',query:{member:member}}); 
+        },
         handleSizeChange: function (size) {   //一页显示多少条
           this.pagesize = size;
           // console.log(this.pagesize);
@@ -245,6 +331,8 @@
           this.$axios.get(`/member/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
+              console.log(resp);
+              
               _this.resData = resp.data
               _this.members = _this.resData.content
               _this.totalElements = _this.resData.totalElements
@@ -295,7 +383,18 @@
             truename: selectedMember.truename,
             phone: selectedMember.phone,
             email: selectedMember.email,
-            memberaddr: selectedMember.memberaddr
+            memberaddr: selectedMember.memberaddr,
+            province: selectedMember.province,
+            city: selectedMember.city,
+            area: selectedMember.area,
+            town: selectedMember.town,
+            road: selectedMember.road,
+            myfloor: selectedMember.myfloor,
+            sex: selectedMember.sex,
+            age: selectedMember.age, 
+            account: selectedMember.account, 
+            password: selectedMember.password
+            
           }).then(resp => {
             if (resp && resp.status === 200) {
               this.$alert('用户信息修改成功')

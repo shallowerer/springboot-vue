@@ -14,34 +14,46 @@
       </div>
         <div class="el-card__body" >
         <slot></slot>
-        <div>
-      输入商品A：
-        <el-input
+        <div >
+          输入商品A：
+          <el-input
+              style="width:200px;margin:0 30px 0 0"
+            placeholder="商品A"
+            clearable
+            maxlength="20"
+            v-model="input1">
+          </el-input>
+          输入商品B：
+          <el-input
             style="width:200px;margin:0 30px 0 0"
-          placeholder="商品A"
-          clearable
-          maxlength="20"
-          v-model="input1">
-        </el-input>
-        输入商品B：
-        <el-input
-          style="width:200px;margin:0 30px 0 0"
-          placeholder="商品B"
-          clearable
-          maxlength="20"
-          v-model="input2">
-        </el-input>
-        <el-button @click="handleAnalysis()" type="primary" style="margin:0 10px">开始分析</el-button>
-        分析结果：
-        <el-input
-          style="width:200px;margin:0 10px 0 0"
-          disabled
-          placeholder="分析结果展示区"
-          clearable
-          maxlength="20"
-          v-model="input3">
-        </el-input>
-       </div>
+            placeholder="商品B"
+            clearable
+            maxlength="20"
+            v-model="input2">
+          </el-input>
+          <el-button @click="handleAnalysis()" type="primary" style="margin:0 10px">开始分析</el-button>
+        
+        </div>
+        <div  style="margin:30px 0 0 0">
+          支持度：
+          <el-input
+            style="width:200px;margin:0 160px 0 0"
+            disabled
+            placeholder="支持度展示区"
+            clearable
+            maxlength="20"
+            v-model="input3">
+          </el-input>
+          置信度:
+          <el-input
+            style="width:200px;margin:0 30px 0 0"
+            disabled
+            placeholder="置信度展示区"
+            clearable
+            maxlength="20"
+            v-model="input4">
+          </el-input>
+        </div>
       </div>
       
     </el-card>
@@ -93,7 +105,13 @@
         </el-table-column>
         <el-table-column
           prop="p"
-          label="关联度"
+          label="支持度"
+          sortable
+          fit>
+        </el-table-column>
+        <el-table-column
+          prop="c"
+          label="置信度"
           sortable
           fit>
         </el-table-column>
@@ -128,6 +146,7 @@ export default {
       input1: '',
       input2: '',
       input3:'',
+      input4:'',
       allData: [],
       twoData: []
     }
@@ -144,7 +163,7 @@ export default {
       this.$axios.get(`/alllian`).then(resp => {
         if (resp && resp.status === 200) {
           _this.allData = resp.data
-          // console.table( _this.allData); 
+          console.table( _this.allData); 
         }
       })
     },
@@ -152,7 +171,8 @@ export default {
       let _this = this
       this.$axios.post(`/handleAnalysis/${_this.input1}/${_this.input2}`).then(resp => {
         if (resp && resp.status === 200) {
-          _this.input3 = resp.data
+          _this.input3 = resp.data.p
+          _this.input4 = resp.data.c
           // console.table( _this.input3); 
         }
       })

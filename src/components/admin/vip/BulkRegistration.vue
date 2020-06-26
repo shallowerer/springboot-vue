@@ -29,10 +29,56 @@
           <el-input type="text" v-model="loginForm.email"
                     auto-complete="off" placeholder="邮箱"></el-input>
         </el-form-item>
-         <el-form-item>
+        <el-form-item>
           <el-input type="text" v-model="loginForm.memberaddr"
                     auto-complete="off" placeholder="地址"></el-input>
         </el-form-item>
+
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.province"
+                    auto-complete="off" placeholder="省"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.city"
+                    auto-complete="off" placeholder="市"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.area"
+                    auto-complete="off" placeholder="区"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.town"
+                    auto-complete="off" placeholder="镇(街道"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.road"
+                    auto-complete="off" placeholder="村(路)"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.myfloor"
+                    auto-complete="off" placeholder="屯(小区)"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.sex"
+                    auto-complete="off" placeholder="性别"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.age"
+                    auto-complete="off" placeholder="年龄"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.account"
+                    auto-complete="off" placeholder="年龄"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="loginForm.password"
+                    auto-complete="off" placeholder="年龄"></el-input>
+        </el-form-item>
+
+        
+
+
         <el-form-item style="width: 100%">
           <el-button type="primary" style="width: 40%;background: #505458;border: none" v-on:click="addMember">添加</el-button>
         </el-form-item>
@@ -58,7 +104,18 @@
             truename: '',
             phone: '',
             email: '',
-            memberaddr: ''
+            memberaddr: '',
+
+            province: '',
+            city: '',
+            area: '',
+            town: '',
+            road: '',
+            myfloor: '',
+            sex: '',
+            age: '',
+            account: '',
+            password: '',
           }
         }
       },
@@ -70,7 +127,18 @@
             truename: '',
             phone: '',
             email: '',
-            memberaddr: ''
+            memberaddr: '',
+
+            province: '',
+            city: '',
+            area: '',
+            town: '',
+            road: '',
+            myfloor: '',
+            sex: '',
+            age: '',
+            account: '',
+            password: '',
           }
         },
         addMember () {
@@ -82,6 +150,17 @@
               phone: this.loginForm.phone,
               email: this.loginForm.email,
               memberaddr: this.loginForm.memberaddr,
+
+              province: loginForm.province,
+              city: loginForm.city,
+              area: loginForm.area,
+              town: loginForm.town,
+              road: loginForm.road,
+              myfloor: loginForm.myfloor,
+              sex: loginForm.sex,
+              age: loginForm.age,
+              account: loginForm.account,
+              password: loginForm.password
             })
             .then(resp => {
               if (resp.data.code === 200) {

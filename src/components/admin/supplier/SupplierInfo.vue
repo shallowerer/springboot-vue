@@ -21,15 +21,15 @@
           <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="供应商邮箱" label-width="120px" prop="email">
-          <el-input v-model="selectedMember.phone" autocomplete="off"></el-input>
+          <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="供应商地址" label-width="120px" prop="addr">
-          <el-input v-model="selectedMember.email" autocomplete="off"></el-input>
+          <el-input v-model="selectedMember.addr" autocomplete="off"></el-input>
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="dialogFormVisible = false;listMembers()">取 消</el-button>
         <el-button type="primary" @click="onSubmit(selectedMember)">确 定</el-button>
       </div>
     </el-dialog>
@@ -47,7 +47,7 @@
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
       <el-input style="width:250px;margin-right:30px;" v-model="searchInfo.name" placeholder="供应商名称"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.addr" placeholder="供应商地址"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.no" placeholder="供应商编号"></el-input>
       <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.phone" placeholder="供应商手机号"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
@@ -194,11 +194,11 @@
         },
         returnList(){
           var _this = this
-          _this.searchInfo.truename = '',
-          _this.searchInfo.memberno = '',
-          _this.searchInfo.phone = ''
+          _this.searchInfo = [],
+          // _this.searchInfo.memberno = '',
+          // _this.searchInfo.phone = ''
           this.disabledFlag = false
-          this.$axios.get(`/member/paging/0/5`).then(resp => {
+          this.$axios.get(`/supplier/paging/0/5`).then(resp => {
             console.log(this.currentPage);
             
             if (resp && resp.status === 200) {
@@ -211,14 +211,18 @@
           })
         },
         handleSearch(){
+          // console.log(this.searchInfo);
+          
           var _this = this
-          if(this.searchInfo.truename != null || this.searchInfo.memberno != null || this.searchInfo.phone != null){
-            console.log(this.searchInfo.truename, this.searchInfo.memberno, this.searchInfo.phone);
-            this.$axios.post(`/member/searchInfo`,{
-              truename: this.searchInfo.truename,
-              memberno: this.searchInfo.memberno,
+          if(this.searchInfo.name != null || this.searchInfo.no != null || this.searchInfo.phone != null){
+            console.log(this.searchInfo);
+            this.$axios.post(`/supplier/searchInfo`,{
+              name: this.searchInfo.name,
+              no: this.searchInfo.no,
               phone: this.searchInfo.phone
             }).then(resp => {
+              console.log(resp);
+              
               if(resp && resp.status === 200 && Number(resp.data) != 0){
                 _this.members = resp.data
                 _this.totalElements = resp.data.length
@@ -254,16 +258,18 @@
         //   })
         // },
         commitStatusChange (value, member) {
+          // console.log(value, member);
+          
           this.$axios.put('/supplier/status', {
             enabled: value,
             name: member.name,
-            no: member.No
+            no: member.no
           }).then(resp => {
             if (resp && resp.status === 200) {
               if (value) {
-                this.$message('用户 [' + member.membername + '] 已启用')
+                this.$message('供应商 [' + member.name + '] 已启用')
               } else {
-                this.$message('用户 [' + member.membername + '] 已禁用')
+                this.$message('供应商 [' + member.name + '] 已禁用')
               }
             }
           })
@@ -280,14 +286,13 @@
           //   }
           // }
           let _this = this
-          this.$axios.put('/member/update',{
+          this.$axios.put('/supplier/update',{
             id: selectedMember.id,
-            memberno: selectedMember.memberno,
-            membername: selectedMember.membername,
-            truename: selectedMember.truename,
+            no: selectedMember.no,
+            name: selectedMember.name,
             phone: selectedMember.phone,
             email: selectedMember.email,
-            memberaddr: selectedMember.memberaddr
+            addr: selectedMember.addr
           }).then(resp => {
             if (resp && resp.status === 200) {
               this.$alert('用户信息修改成功')
@@ -311,13 +316,15 @@
           // this.selectedRolesIds = roleIds
         },
         deleteMembers(member){
+          console.log(member);
+          
           this.$confirm('确定删除？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
             let _this = this
-            this.$axios.delete(`/member/deleteMember/${member.id}`,{
+            this.$axios.delete(`/supplier/deleteSupplier/${member.id}`,{
             }).then(resp => {
             if (resp.data.code === 200) {
               this.$alert(resp.data.data, '提示', {

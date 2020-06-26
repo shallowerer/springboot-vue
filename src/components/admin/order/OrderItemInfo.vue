@@ -2,32 +2,29 @@
   <div>
     <!-- （编辑）修改信息弹框 -->
     <el-dialog
-      title="修改订单信息"
+      title="修改订单明细信息"
       :visible.sync="dialogFormVisible">
       <el-form v-model="selectedMember" style="text-align: left" ref="dataForm">
         <el-form-item label="标识" label-width="120px" prop="id">
           <label>{{selectedMember.id}}</label>
         </el-form-item>
-        <el-form-item label="编号" label-width="120px" prop="orderNo">
+        <el-form-item label="订单编号" label-width="120px" prop="orderNo">
           <el-input v-model="selectedMember.orderNo" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="会员编号" label-width="120px" prop="mid">
-          <el-input v-model="selectedMember.mid" autocomplete="off"></el-input>
+        <el-form-item label="商品id" label-width="120px" prop="commodityId">
+          <el-input v-model="selectedMember.commodityId" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="总价" label-width="120px" prop="totalPrice">
-          <el-input v-model="selectedMember.totalPrice" autocomplete="off"></el-input>
+        <el-form-item label="商品名称" label-width="120px" prop="commodityName">
+          <el-input v-model="selectedMember.commodityName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="下单时间" label-width="120px" prop="orderTime">
-          <el-input v-model="selectedMember.orderTime" autocomplete="off"></el-input>
+        <el-form-item label="数量" label-width="120px" prop="amount">
+          <el-input v-model="selectedMember.amount" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="管理员id" label-width="120px" prop="uid">
-          <el-input v-model="selectedMember.uid" autocomplete="off"></el-input>
+        <el-form-item label="价格￥" label-width="120px" prop="price">
+          <el-input v-model="selectedMember.price" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="地址" label-width="120px" prop="address">
-          <el-input v-model="selectedMember.address" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="支付状态" label-width="120px" prop="payStatus">
-          <el-input v-model="selectedMember.payStatus" autocomplete="off"></el-input>
+        <el-form-item label="小计￥" label-width="120px" prop="lttAccount">
+          <el-input v-model="selectedMember.lttAccount" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -40,7 +37,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>订单信息</el-breadcrumb-item>
+        <el-breadcrumb-item>订单明细</el-breadcrumb-item> 
       </el-breadcrumb>
     </el-row>
 
@@ -48,8 +45,8 @@
     <bulk-registration @onSubmit="listMembers()"></bulk-registration>
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.orderTime" placeholder="时间"></el-input>
-      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.address" placeholder="地址"></el-input>
+      <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.commodityName" placeholder="商品名称"></el-input>
+      <!-- <el-input style="width:250px;margin-right:30px;"  v-model="searchInfo.orderNo" placeholder="订单编号"></el-input> -->
       <el-button type="primary" icon="el-icon-search" @click="handleSearch()">模糊搜索</el-button>
       <el-button type="primary" icon="el-icon-tickets" @click="returnList()">返回列表</el-button>
     </div>
@@ -68,46 +65,36 @@
         </el-table-column>
         <el-table-column
           prop="id"
-          label="id"
+          label="明细表编号"
           sortable
           fit>
         </el-table-column>
         <el-table-column
-          prop="orderNo"
+          prop="commodityOrder.orderNo"
           label="订单编号"
           fit>
         </el-table-column>
         <el-table-column
-          prop="totalPrice"
-          label="总价格￥"
+          prop="commodityName"
+          label="商品名称"
           fit>
         </el-table-column>
         <el-table-column
-          prop="orderTime"
-          label="订单详细时间"
+          prop="amount"
+          label="数量"
           fit>
         </el-table-column>
         <el-table-column
-          prop="uid"
-          label="操作人标识"
+          prop="price"
+          label="价格￥"
           fit>
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="配送地址"
-          show-overflow-tooltip
+          prop="lttAccount"
+          label="小计￥"
           fit>
         </el-table-column>
-        <el-table-column
-          prop="payStatus"
-          label="支付状态"
-          fit>
-        </el-table-column>
-        <el-table-column
-          prop="mid"
-          label="下单会员标识"
-          fit>
-        </el-table-column>
+       
 
         <!-- <el-table-column
           label="状态"
@@ -128,7 +115,7 @@
           width="120">
           <template slot-scope="scope">
             <el-button
-              @click="editMembers(scope.row)"
+              @click="editMembers(scope.row,scope.row.commodityOrder.orderNo)"
               type="text"
               size="small">
               编辑
@@ -164,7 +151,7 @@
 </template>
 
 <script>
-  import BulkRegistration from './BulkRegistration2'
+  import BulkRegistration from './BulkRegistration'
     export default {
       name: 'UserProfile',
       components: {BulkRegistration},
@@ -179,10 +166,7 @@
             dialogFormVisible: false,
             selectedMember: [],
             selectedRolesIds: [],
-            searchInfo: {
-              orderTime:'',
-              address:''
-            }
+            searchInfo: []
           }
       },
       mounted () {
@@ -209,12 +193,9 @@
         },
         returnList(){
           var _this = this
-          _this.searchInfo={
-            orderTime:'',
-            address:''
-          }
+          _this.searchInfo=[]
           this.disabledFlag = false
-          this.$axios.get(`/commodityOrder/paging/0/5`).then(resp => {
+          this.$axios.get(`/orderItem/paging/0/5`).then(resp => {
             console.log(this.currentPage);
             
             if (resp && resp.status === 200) {
@@ -228,20 +209,17 @@
         },
         handleSearch(){
           var _this = this
-          if(this.searchInfo.orderTime != null || this.searchInfo.address != null){
-            console.log(this.searchInfo);
-            
-            _this.$axios.get(`/commodityOrder/searchInfoCommodityOrder?order=${_this.searchInfo.orderTime}&address=${_this.searchInfo.address}`).then(resp => {
+          if(this.searchInfo.commodityName != null || this.searchInfo.memberno != null){
+            this.$axios.post(`/orderItem/searchInfo`,{
+              commodityName: this.searchInfo.commodityName,
+              orderNo: this.searchInfo.orderNo
+            }).then(resp => {
               if(resp && resp.status === 200 && Number(resp.data) != 0){
                 _this.members = resp.data
                 _this.totalElements = resp.data.length
                 _this.pagesize = resp.data.length
                 _this.disabledFlag = true
                 // console.log(111111,resp.data);
-                _this.searchInfo = {
-                  orderTime:'',
-                  address:''
-                }
               }else{
                 _this.members = []
               }
@@ -251,7 +229,7 @@
         },
         listMembers () {
           var _this = this
-          this.$axios.get(`/commodityOrder/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
+          this.$axios.get(`/orderItem/paging/${this.currentPage-1}/${this.pagesize}`).then(resp => {
             // console.log(this.currentPage);
             if (resp && resp.status === 200) {
               console.log(resp);
@@ -272,21 +250,21 @@
         //     }
         //   })
         // },
-        // commitStatusChange (value, member) {
-        //   this.$axios.put('/member/status', {
-        //     enabled: value,
-        //     membername: member.membername,
-        //     memberno: member.memberno
-        //   }).then(resp => {
-        //     if (resp && resp.status === 200) {
-        //       if (value) {
-        //         this.$message('用户 [' + member.membername + '] 已启用')
-        //       } else {
-        //         this.$message('用户 [' + member.membername + '] 已禁用')
-        //       }
-        //     }
-        //   })
-        // },
+        commitStatusChange (value, member) {
+          this.$axios.put('/orderItem/status', {
+            enabled: value,
+            membername: member.membername,
+            memberno: member.memberno
+          }).then(resp => {
+            if (resp && resp.status === 200) {
+              if (value) {
+                this.$message('用户 [' + member.membername + '] 已启用')
+              } else {
+                this.$message('用户 [' + member.membername + '] 已禁用')
+              }
+            }
+          })
+        },
         onSubmit (selectedMember) {
           // let _this = this
           // // 根据视图绑定的角色 id 向后端传送角色信息
@@ -299,15 +277,14 @@
           //   }
           // }
           let _this = this
-          this.$axios.put('/commodityOrder/update',{
+          this.$axios.put('/orderItem/update',{
             id: selectedMember.id,
             orderNo: selectedMember.orderNo,
-            mid: selectedMember.mid,
-            totalPrice: selectedMember.totalPrice,
-            orderTime: selectedMember.orderTime,
-            uid: selectedMember.uid,
-            address: selectedMember.address,
-            payStatus: selectedMember.payStatus
+            commodityId: selectedMember.commodityId,
+            commodityName: selectedMember.commodityName,
+            amount: selectedMember.amount,
+            price: selectedMember.price,
+            lttAccount: selectedMember.lttAccount
           }).then(resp => {
             if (resp && resp.status === 200) {
               this.$alert('信息修改成功')
@@ -321,9 +298,13 @@
             })
           })
         },
-        editMembers (member) {
+        editMembers (member,oId) {
+          // console.log(oId);
+          
           this.dialogFormVisible = true
           this.selectedMember = member
+          this.selectedMember.orderNo = oId
+
           // let roleIds = []
           // for (let i = 0; i < user.roles.length; i++) {
           //   roleIds.push(user.roles[i].id)
@@ -331,27 +312,26 @@
           // this.selectedRolesIds = roleIds
         },
         deleteMembers(member){
-          let _this = this
           this.$confirm('确定删除？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            console.log(member);
-            _this.$axios.delete(`/commodityOrder/deleteCommodityOrder/${member.id}`,{
+            let _this = this
+            this.$axios.delete(`/orderItem/deleteOrderItem/${member.id}`,{
             }).then(resp => {
             if (resp.data.code === 200) {
-              _this.$alert(resp.data.data, '提示', {
+              this.$alert(resp.data.data, '提示', {
                 confirmButtonText: '确定'
               })
-              _this.returnList()
+              this.listMembers()
             } else {
-              _this.$alert(resp.data.message, '提示', {
+              this.$alert(resp.data.message, '提示', {
                 confirmButtonText: '确定'
               })
             }
           }).catch(failResponse => {
-            _this.$alert('发生错误', '提示', {
+            this.$alert('发生错误', '提示', {
               confirmButtonText: '确定'
             })
           }) 

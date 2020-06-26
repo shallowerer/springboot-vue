@@ -7,7 +7,7 @@
         <el-breadcrumb-item>商品管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <edit-form @onSubmit="loadCommodities()" ref="edit"></edit-form>
+    <edit-form @onSubmit="returnList()" ref="edit"></edit-form>
 
     <el-row>
     <div style="margin: 20px 0 0 -100px" class="">
@@ -196,6 +196,7 @@
           cover: item.cover,
           date: item.date,
           sellPrice: item.sellPrice,
+          originPrice:item.originPrice,
           category: {
             id: item.category.id.toString(),
             name: item.category.name

@@ -3,11 +3,14 @@ import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// mavon-editer
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import ElementUI from 'element-ui' //element-ui的全部组件
 import 'element-ui/lib/theme-chalk/index.css'//element-ui的css
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
-
+Vue.use(mavonEditor)
 Vue.use(ElementUI) //使用elementUI
 Vue.config.productionTip = false
 

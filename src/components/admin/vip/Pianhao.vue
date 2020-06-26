@@ -7,9 +7,35 @@
         <el-breadcrumb-item>会员偏好</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
+
     <el-card style="margin: 18px 2%;width: 95%">
       <div class="el-card__header" >
-        <slot name="header">用户数据输入</slot>
+        <slot name="header">当前会员信息</slot>
+      </div>
+        <div class="el-card__body" >
+        <slot></slot>
+        <span style="display:inline-block;margin:0 30px">会员编号：{{memberInfo.id}}</span>
+        <span style="display:inline-block;margin:0 30px">会员昵称：{{memberInfo.membername}}</span>
+        <span style="display:inline-block;margin:0 30px">会员地址：{{memberInfo.memberaddr}}</span>
+        <span style="display:inline-block;margin:0 30px">会员电话：{{memberInfo.phone}}</span>
+        <span style="display:inline-block;margin:0 30px">会员真名：{{memberInfo.truename}}</span>
+      </div>
+    </el-card>
+
+    <el-card style="margin: 18px 2%;width: 95%">
+      <div class="el-card__header" >
+          <slot name="header">用户偏好分析</slot>
+      </div>
+      <div class="el-card__body" >
+        <div class="echart-sheet">
+        <!--条形图-->
+          <div id="allph" style="width:90%; height: 400px;margin:0 auto"></div>
+        </div>
+      </div>
+    </el-card>
+    <el-card style="margin: 18px 2%;width: 95%">
+      <div class="el-card__header" >
+        <slot name="header">输入会员id可直接查询其他会员偏好</slot>
       </div>
         <div class="el-card__body" >
         <slot></slot>
@@ -28,36 +54,6 @@
       </div> 
     </el-card>
 
-    <el-card style="margin: 18px 2%;width: 95%">
-      <div class="el-card__header" >
-          <slot name="header">用户偏好分析</slot>
-      </div>
-      <div class="el-card__body" >
-        <div class="echart-sheet">
-        <!--条形图-->
-          <div id="allph" style="width:90%; height: 400px;margin:0 auto"></div>
-        </div>
-      </div>
-    </el-card>
-
-    <el-card style="margin: 18px 2%;width: 95%">
-      <div class="el-card__header" >
-        <slot name="header">当前会员信息</slot>
-      </div>
-        <div class="el-card__body" >
-        <slot></slot>
-        <span style="display:inline-block;margin:0 30px">会员编号：{{memberInfo.id}}</span>
-        <span style="display:inline-block;margin:0 30px">会员昵称：{{memberInfo.membername}}</span>
-        <span style="display:inline-block;margin:0 30px">会员地址：{{memberInfo.memberaddr}}</span>
-        <span style="display:inline-block;margin:0 30px">会员电话：{{memberInfo.phone}}</span>
-        <span style="display:inline-block;margin:0 30px">会员真名：{{memberInfo.truename}}</span>
-  
-        
-       
-        
-      </div>
-      
-    </el-card>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
         :data="memberlove"
@@ -134,14 +130,30 @@ export default {
       memberlove:[],
       memberPianhao:[],
 
-      allph:[]
+      allph:[],
+
+      params:{}
     }
   },
   mounted () {
+    console.log(this.params);
+    
+    if(this.params.member){
+      this.handleGetOneInit()
+      return;
+    }
     this.loadData()
   },
   computed: {
      
+  },
+  created(){
+    //获取传入的参数
+    var param = this.$route.query;
+    // console.log(param);
+    // var param = this.$route.params;
+    this.params = param
+    
   },
   methods: {
     loadData(){
@@ -159,6 +171,23 @@ export default {
         }
       })  
     },
+     handleGetOneInit(){
+      let _this = this
+      this.$axios.get(`/oneMemberPianhao/${_this.params.member.id}`).then(resp => {
+        if (resp && resp.status === 200) {
+          // console.log(resp.data);
+          _this.memberInfo = resp.data[0].menberInfo
+          _this.memberlove =   resp.data[0].memberlove
+          // console.log(_this.memberlove);
+          _this.$nextTick(function() {
+            _this.drawPie3('allph')
+          })  
+        }
+      }) 
+           
+    },
+
+
 
     handleGetOne(){
       let _this = this
@@ -175,6 +204,7 @@ export default {
           }
         }) 
       }else{
+
       }             
     },
 

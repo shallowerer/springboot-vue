@@ -242,22 +242,24 @@ export default {
           _this.contrastItem = resp.data.map(x => {return x.cname})
           // console.log(_this.contrastItem);
          
-          for (let i = 0; i < _this.contrastItem.length; i++) {
-            _this.myBarData[i] = []
-          }
+          // for (let i = 0; i < _this.contrastItem.length; i++) {
+          //   _this.myBarData[i] = []
+          // }
 
-          for (let i = 0; i < _this.contrastItem.length; i++) {
-              // _this.myBarData[i] = resp.data.map(x => {return parseInt(x.count),parseInt(x.proportion),parseInt(x.cmoney),parseInt(x.p)})
-              // console.table(obj);
+          // for (let i = 0; i < _this.contrastItem.length; i++) {
+          //     // _this.myBarData[i] = resp.data.map(x => {return parseInt(x.count),parseInt(x.proportion),parseInt(x.cmoney),parseInt(x.p)})
+          //     // console.table(obj);
 
-              _this.myBarData[0][i] = parseInt(resp.data[i].count)
-              _this.myBarData[1][i] = parseInt(resp.data[i].proportion)
-              _this.myBarData[2][i] = parseInt(resp.data[i].cmoney)
-              _this.myBarData[3][i] = parseInt(resp.data[i].p)
+          //     _this.myBarData[0][i] = parseInt(resp.data[i].count)
+          //     console.log(_this.myBarData);
               
-              // console.log(_this.myBarData[i]);
+          //     // _this.myBarData[1][i] = parseInt(resp.data[i].proportion)
+          //     _this.myBarData[2][i] = parseInt(resp.data[i].cmoney)
+          //     // _this.myBarData[3][i] = parseInt(resp.data[i].p)
               
-          }
+          //     // console.log(_this.myBarData[i]);
+              
+          // }
 
           _this.$nextTick(function() {
             _this.drawPie('main')
@@ -361,7 +363,16 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: _this.contrastItem
+          data:(function () {
+              var arrNum = [];
+              var temp = _this.allData;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push(temp[i].cname);
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
         },
         yAxis: {
           type: 'value',
@@ -392,7 +403,16 @@ export default {
             color: '#2661FF'
             },
              barWidth: 20,
-            data: _this.myBarData[0]
+            data:(function () {
+              var arrNum = [];
+              var temp = _this.allData;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push(temp[i].count);
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
           },
           {
             name: '销量占比(%)',
@@ -415,7 +435,16 @@ export default {
               color: '#DC143C'
             },
             barWidth: 20,
-            data: _this.myBarData[1]
+            data: (function () {
+              var arrNum = [];
+              var temp = _this.allData;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push(temp[i].proportion);
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
           },
           {
             name: '销售额',
@@ -438,7 +467,16 @@ export default {
               color: '#99B6FF'
             },
              barWidth: 20,
-            data: _this.myBarData[2]
+            data:(function () {
+              var arrNum = [];
+              var temp = _this.allData;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push(temp[i].cmoney);
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
           },
           {
             name: '销售额占比(%)',
@@ -461,7 +499,16 @@ export default {
               color: '#FFA722'
             },
             barWidth: 20, // 宽度
-            data: _this.myBarData[3]
+            data: (function () {
+              var arrNum = [];
+              var temp = _this.allData;
+              for(var i=0;i<temp.length; i++){
+                arrNum.push(temp[i].p);
+                // console.log(arrNum);
+                
+              }
+              return arrNum;
+            })()
           },
           // {
           //   name: '雨衣',
@@ -510,173 +557,15 @@ export default {
       })
     },
 
-     drawPie2(id) {
-      let _this = this
-      this.charts = echarts.init(document.getElementById(id))
-      // let dataAll = _this.
-      let data1 = [1,1,1,1] // 实发
-      let data2 = [3,3,3,3] // 个人
-      let data3 = [2,2,2,2] // 个人所得税
-      let data4 = [3,3,3,3] // 公司社保
-      let data5 = [9,9,9,9] // 福利
-      
-      // 总计的计算
-      // let dataSum = (function () {
-      //   let datas = []
-      //   // for (let i = 0; i < data1.length; i++) {
-      //   //   datas.push(data1[i] + data2[i] + data3[i] + data4[i] + data5[i])
-      //   // }
-      //   return datas
-      // }())
-      // console.log(_this.contrastItem)
-      // console.log(_this.myBarData[0])
-      
-      this.charts.setOption({
-        tooltip: {
-          trigger: 'axis',
-          show: true,
-          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-          },
-          // formatter: function (params) {
-          //   let relVal = params[0].name
-          //   for (let i = 0, l = params.length; i < l; i++) {
-          //     if (params[i].value) {
-          //       relVal += '<br/>' + params[i].seriesName + ' : ' + params[i].value
-          //     }
-          //   }
-          //   return relVal
-          // } // 让为0的值不显示
-        }, // 提示框
-        legend: {
-          // data: ['销量', '销量占比(%)', '销售额', '销售额占比(%)']
-          // selectedMode: false // 取消图例点击动态效果
-        },
-        grid: {
-          top: '10%',
-          left: '0%',
-          right: '0%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          data: _this.contrastItem
-        },
-        yAxis: {
-          type: 'value',
-          max: function(value) {
-            return value.max // 因为统计功能使得最大刻度为原来的两倍,此处让其还原
-          }
-        },
-        series: [
-          {
-            name: '销量',
-            type: 'line',
-            stack: null,
-           
-            label: {
-              normal: {
-                formatter: function(params) {
-                  if (params.value > 0) {
-                    return params.value
-                  } else {
-                    return ''
-                  }
-                }, // 为0时不显示
-                show: true,
-                position: 'insideRight'
-              }
-            },
-            itemStyle: {
-            color: '#2661FF'
-            },
-             barWidth: 20,
-            data: _this.myBarData[0]
-          },
-          {
-            name: '销量占比(%)',
-            type: 'line',
-            stack: null,
-            label: {
-              normal: {
-                formatter: function(params) {
-                  if (params.value > 0) {
-                    return params.value
-                  } else {
-                    return ''
-                  }
-                }, // 为0时不显示
-                show: true,
-                position: 'insideRight'
-              }
-            },
-            itemStyle: {
-              color: '#DC143C'
-            },
-            barWidth: 20,
-            data: _this.myBarData[1]
-          },
-          {
-            name: '销售额',
-            type: 'line',
-            stack: null,
-            label: {
-              normal: {
-                formatter: function(params) {
-                  if (params.value > 0) {
-                    return params.value
-                  } else {
-                    return ''
-                  }
-                }, // 为0时不显示
-                show: true,
-                position: 'insideRight'
-              }
-            },
-            itemStyle: {
-              color: '#99B6FF'
-            },
-             barWidth: 20,
-            data: _this.myBarData[2]
-          },
-          {
-            name: '销售额占比(%)',
-            type: 'line',
-            stack: null,
-            label: {
-              normal: {
-                formatter: function(params) {
-                  if (params.value > 0) {
-                    return params.value
-                  } else {
-                    return ''
-                  }
-                }, // 为0时不显示
-                show: true,
-                position: 'insideRight'
-              }
-            },
-            itemStyle: {
-              color: '#FFA722'
-            },
-            barWidth: 20, // 宽度
-            data: _this.myBarData[3]
-          },
-        ]
-      })
-    },
-
-
-    //  drawPie3(id) {
+    //  drawPie2(id) {
     //   let _this = this
     //   this.charts = echarts.init(document.getElementById(id))
     //   // let dataAll = _this.
-    //   // let data1 = [1,1,1,1] // 实发
-    //   // let data2 = [3,3,3,3] // 个人
-    //   // let data3 = [2,2,2,2] // 个人所得税
-    //   // let data4 = [3,3,3,3] // 公司社保
-    //   // let data5 = [9,9,9,9] // 福利
+    //   let data1 = [1,1,1,1] // 实发
+    //   let data2 = [3,3,3,3] // 个人
+    //   let data3 = [2,2,2,2] // 个人所得税
+    //   let data4 = [3,3,3,3] // 公司社保
+    //   let data5 = [9,9,9,9] // 福利
       
     //   // 总计的计算
     //   // let dataSum = (function () {
@@ -690,16 +579,8 @@ export default {
     //   // console.log(_this.myBarData[0])
       
     //   this.charts.setOption({
-    //     // title: {
-    //     //      text: '占比统计',
-    //     //      left: 'center',
-    //     //      top: 0,
-    //     //      textStyle: {
-    //     //          color: '#ccc'
-    //     //      }
-    //     //  },
     //     tooltip: {
-    //       trigger: 'item',
+    //       trigger: 'axis',
     //       show: true,
     //       axisPointer: {            // 坐标轴指示器，坐标轴触发有效
     //         type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
@@ -715,7 +596,7 @@ export default {
     //       // } // 让为0的值不显示
     //     }, // 提示框
     //     legend: {
-    //       data: ['销量', '销量占比(%)', '销售额', '销售额占比(%)']
+    //       // data: ['销量', '销量占比(%)', '销售额', '销售额占比(%)']
     //       // selectedMode: false // 取消图例点击动态效果
     //     },
     //     grid: {
@@ -725,24 +606,21 @@ export default {
     //       bottom: '3%',
     //       containLabel: true
     //     },
-    //     // xAxis: {
-    //     //   type: 'category',
-    //     //   data: _this.contrastItem
-    //     // },
-    //     // yAxis: {
-    //     //   type: 'value',
-    //     //   max: function(value) {
-    //     //     return value.max // 因为统计功能使得最大刻度为原来的两倍,此处让其还原
-    //     //   }
-    //     // },
+    //     xAxis: {
+    //       type: 'category',
+    //       data: _this.contrastItem
+    //     },
+    //     yAxis: {
+    //       type: 'value',
+    //       max: function(value) {
+    //         return value.max // 因为统计功能使得最大刻度为原来的两倍,此处让其还原
+    //       }
+    //     },
     //     series: [
     //       {
-    //         name: '销量占比',
-    //         type: 'pie',
-    //         clockwise:'true',
-    //         startAngle:'0',
-    //         radius : '60%',
-    //         center: ['20%', '50%'],
+            
+    //         name: '销量',
+    //         type: 'line',
     //         stack: null,
            
     //         label: {
@@ -762,119 +640,35 @@ export default {
     //         color: '#2661FF'
     //         },
     //          barWidth: 20,
-    //         // data: 
-    //         data:[
-    //           {
-    //             value:70,
-    //             name:'语言',
-    //             itemStyle:{
-    //               normal:{
-    //                 color:'rgb(255,192,0)',
-    //                 shadowBlur:'90',
-    //                 shadowColor:'rgba(0,0,0,0.8)',
-    //                 shadowOffsetY:'30'
+    //         data: _this.myBarData[0]
+    //       },
+    //       {
+    //         name: '销量占比(%)',
+    //         type: 'line',
+    //         stack: null,
+    //         label: {
+    //           normal: {
+    //             formatter: function(params) {
+    //               if (params.value > 0) {
+    //                 return params.value
+    //               } else {
+    //                 return ''
     //               }
-    //             }
-    //           },
-    //           {
-    //             value:10,
-    //             name:'美国科学&社会科学',
-    //             itemStyle:{
-    //               normal:{
-    //                 color:'rgb(1,175,80)'
-    //               }
-    //             }
-    //           },
-    //           {
-    //             value:30,
-    //               name:'美国数学',
-    //               itemStyle:{
-    //                 normal:{
-    //                   color:'rgb(122,48,158)'
-    //                 }
-    //               }
-    //           },
-              
-    //         ]  
-              
-    //       // {
-    //       //   name: '销量占比(%)',
-    //       //   type: 'line',
-    //       //   stack: null,
-    //       //   label: {
-    //       //     normal: {
-    //       //       formatter: function(params) {
-    //       //         if (params.value > 0) {
-    //       //           return params.value
-    //       //         } else {
-    //       //           return ''
-    //       //         }
-    //       //       }, // 为0时不显示
-    //       //       show: true,
-    //       //       position: 'insideRight'
-    //       //     }
-    //       //   },
-    //       //   itemStyle: {
-    //       //     color: '#DC143C'
-    //       //   },
-    //       //   barWidth: 20,
-    //       //   data: _this.myBarData[1]
-    //       // },
-    //       // {
-    //       //   name: '销售额',
-    //       //   type: 'line',
-    //       //   stack: null,
-    //       //   label: {
-    //       //     normal: {
-    //       //       formatter: function(params) {
-    //       //         if (params.value > 0) {
-    //       //           return params.value
-    //       //         } else {
-    //       //           return ''
-    //       //         }
-    //       //       }, // 为0时不显示
-    //       //       show: true,
-    //       //       position: 'insideRight'
-    //       //     }
-    //       //   },
-    //       //   itemStyle: {
-    //       //     color: '#99B6FF'
-    //       //   },
-    //       //    barWidth: 20,
-    //       //   data: _this.myBarData[2]
-    //       // },
-    //       // {
-    //       //   name: '销售额占比(%)',
-    //       //   type: 'line',
-    //       //   stack: null,
-    //       //   label: {
-    //       //     normal: {
-    //       //       formatter: function(params) {
-    //       //         if (params.value > 0) {
-    //       //           return params.value
-    //       //         } else {
-    //       //           return ''
-    //       //         }
-    //       //       }, // 为0时不显示
-    //       //       show: true,
-    //       //       position: 'insideRight'
-    //       //     }
-    //       //   },
-    //       //   itemStyle: {
-    //       //     color: '#FFA722'
-    //       //   },
-    //       //   barWidth: 20, // 宽度
-    //       //   data: _this.myBarData[3]
+    //             }, // 为0时不显示
+    //             show: true,
+    //             position: 'insideRight'
+    //           }
+    //         },
+    //         itemStyle: {
+    //           color: '#DC143C'
+    //         },
+    //         barWidth: 20,
+    //         data: _this.myBarData[1]
     //       },
     //       {
     //         name: '销售额',
-    //         type: 'pie',
-    //         clockwise:'true',
-    //         startAngle:'0',
-    //         radius : '60%',
-    //         center: ['80%', '50%'],
+    //         type: 'line',
     //         stack: null,
-           
     //         label: {
     //           normal: {
     //             formatter: function(params) {
@@ -889,50 +683,40 @@ export default {
     //           }
     //         },
     //         itemStyle: {
-    //         color: '#2661FF'
+    //           color: '#99B6FF'
     //         },
     //          barWidth: 20,
-    //         // data: 
-    //         data:[
-    //           {
-    //             value:70,
-    //             name:'语言',
-    //             itemStyle:{
-    //               normal:{
-    //                 color:'rgb(255,192,0)',
-    //                 shadowBlur:'90',
-    //                 shadowColor:'rgba(0,0,0,0.8)',
-    //                 shadowOffsetY:'30'
+    //         data: _this.myBarData[2]
+    //       },
+    //       {
+    //         name: '销售额占比(%)',
+    //         type: 'line',
+    //         stack: null,
+    //         label: {
+    //           normal: {
+    //             formatter: function(params) {
+    //               if (params.value > 0) {
+    //                 return params.value
+    //               } else {
+    //                 return ''
     //               }
-    //             }
-    //           },
-    //           {
-    //             value:10,
-    //             name:'美国科学&社会科学',
-    //             itemStyle:{
-    //               normal:{
-    //                 color:'rgb(1,175,80)'
-    //               }
-    //             }
-    //           },
-    //           {
-    //             value:20,
-    //               name:'美国数学',
-    //               itemStyle:{
-    //                 normal:{
-    //                   color:'rgb(122,48,158)'
-    //                 }
-    //               }
-    //           },
-              
-    //         ]  
-              
-         
+    //             }, // 为0时不显示
+    //             show: true,
+    //             position: 'insideRight'
+    //           }
+    //         },
+    //         itemStyle: {
+    //           color: '#FFA722'
+    //         },
+    //         barWidth: 20, // 宽度
+    //         data: _this.myBarData[3]
     //       },
     //     ]
     //   })
     // },
 
+
+  
     drawPie3(id) {
       let _this = this
       this.charts = echarts.init(document.getElementById(id))
@@ -968,7 +752,7 @@ export default {
           {
             name: '销售量（件）',
             type: 'pie',
-            radius: '55%',
+            radius: '45%',
             roseType: 'angle',
             center: ['20%', '50%'],
             data:(function () {
@@ -985,7 +769,7 @@ export default {
            {
             name: '销售额（元）',
             type: 'pie',
-            radius: '55%',
+            radius: '45%',
             roseType: 'angle',
             center: ['75%', '50%'],
             data:(function () {

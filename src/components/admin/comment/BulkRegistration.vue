@@ -3,36 +3,42 @@
     <el-button class="add-button" type="success" @click="dialogFormVisible = true">批量添加</el-button>
     
     <el-dialog
-      title="信息详情"
+      title="添加"
       :visible.sync="dialogFormVisible"
       @close="clear"
       width="25%">
       <el-form :model="loginForm" :rules="rules" label-position="left"
                label-width="0px">
         <el-form-item prop="memberno">
-          <el-input type="text" v-model="loginForm.memberno"
+          <el-input type="text" v-model="loginForm.no"
                     auto-complete="off" placeholder="编号"></el-input>
         </el-form-item>
         <el-form-item prop="membername">
-          <el-input type="text" v-model="loginForm.membername"
-                    auto-complete="off" placeholder="昵称"></el-input>
+          <el-input type="text" v-model="loginForm.name"
+                    auto-complete="off" placeholder="评论人"></el-input>
+        </el-form-item>
+
+        <!-- <el-form-item>
+          <el-input type="text" v-model="loginForm.givetime"
+                    auto-complete="off" placeholder="评价时间"></el-input>
+        </el-form-item> -->
+        <el-form-item>
+          <el-input type="number"  :max="5" :min="1" v-model="loginForm.servicestar"
+                    auto-complete="off" placeholder="服务得分"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.truename"
-                    auto-complete="off" placeholder="真实姓名"></el-input>
+          <el-input type="number"  :max="5" :min="1" v-model="loginForm.costar"
+                    auto-complete="off" placeholder="商品得分"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.phone"
-                    auto-complete="off" placeholder="电话号码"></el-input>
+          <el-input type="number"  :max="5" :min="1" v-model="loginForm.roomstar"
+                    auto-complete="off" placeholder="环境得分"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="text" v-model="loginForm.email"
-                    auto-complete="off" placeholder="邮箱"></el-input>
+          <el-input type="text" v-model="loginForm.givecontent"
+                    auto-complete="off" placeholder="评论内容"></el-input>
         </el-form-item>
-         <el-form-item>
-          <el-input type="text" v-model="loginForm.memberaddr"
-                    auto-complete="off" placeholder="地址"></el-input>
-        </el-form-item>
+
         <el-form-item style="width: 100%">
           <el-button type="primary" style="width: 40%;background: #505458;border: none" v-on:click="addMember">添加</el-button>
         </el-form-item>
@@ -48,40 +54,42 @@
         return {
           dialogFormVisible: false,
           rules: {
-            truename: [{required: true, message: '真实姓名不能为空', trigger: 'blur'}],
-            phone: [{required: true, message: '电话号码不能为空', trigger: 'blur'}],
-            memberaddr: [{required: true, message: '地址不能为空', trigger: 'blur'}]
+            name: [{required: true, message: '评论人不能为空', trigger: 'blur'}],
+            givecontent: [{required: true, message: '评论内容不能为空', trigger: 'blur'}]
           },
           loginForm: {
-            memberno: '',
-            membername: '',
-            truename: '',
-            phone: '',
-            email: '',
-            memberaddr: ''
+            no: '',
+            name: '',
+            givetime: '',
+            servicestar: '',
+            costar: '',
+            roomstar: '',
+            givecontent: ''
           }
         }
       },
       methods: {
         clear () {
           this.loginForm = {
-            memberno: '',
-            membername: '',
-            truename: '',
-            phone: '',
-            email: '',
-            memberaddr: ''
+            no: '',
+            name: '',
+            givetime: '',
+            servicestar: '',
+            costar: '',
+            roomstar: '',
+            givecontent: ''
           }
         },
         addMember () {
           this.$axios
-            .post('/addMember', {
-              memberno: this.loginForm.memberno,
-              membername: this.loginForm.membername,
-              truename: this.loginForm.truename,
-              phone: this.loginForm.phone,
-              email: this.loginForm.email,
-              memberaddr: this.loginForm.memberaddr,
+            .post('/addComment', {
+              no: this.loginForm.no,
+              name: this.loginForm.name,
+              givetime: this.loginForm.givetime,
+              servicestar: this.loginForm.servicestar,
+              costar: this.loginForm.costar,
+              roomstar: this.loginForm.roomstar,
+              givecontent: this.loginForm.givecontent,
             })
             .then(resp => {
               if (resp.data.code === 200) {

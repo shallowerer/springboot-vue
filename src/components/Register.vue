@@ -78,7 +78,8 @@
 </script>
 <style>
   #paper {
-    background:url("../assets/img/bg/bg3.jpg") no-repeat;
+    background:url("../assets/img/bg/bgc.jpg") no-repeat;
+    /* background:#87CEFA; */
     background-position: center;
     height: 100%;
     width: 100%;

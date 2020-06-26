@@ -18,6 +18,9 @@
         <el-form-item label="价格" :label-width="formLabelWidth" prop="sellPrice">
           <el-input v-model="form.sellPrice" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="历史价格" :label-width="formLabelWidth" prop="originPrice">
+          <el-input v-model="form.originPrice" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="封面" :label-width="formLabelWidth" prop="cover">
           <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
           <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
@@ -26,7 +29,7 @@
           <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
-        <el-select v-model="form.category.id" placeholder="请选择分类">
+        <!-- <el-select v-model="form.category.id" placeholder="请选择分类">
           <el-option label="整件装" value="1"></el-option>
           <el-option label="套装" value="2"></el-option>
           <el-option label="外套" value="3"></el-option>
@@ -34,6 +37,12 @@
           <el-option label="裙" value="5"></el-option>
           <el-option label="裤" value="6"></el-option>
           <el-option label="其他" value="7"></el-option>
+        </el-select> -->
+        <el-select v-model="form.category.id" placeholder="请选择分类">
+          <template v-for="item in dbCate" >
+            <el-option v-if="form.category.id == item.id" selected="selected" :value="item.id" :label="item.name"></el-option>
+            <el-option v-else :value="item.id" :label="item.name"></el-option>
+          </template>
         </el-select>
         </el-form-item>
         <el-form-item prop="id" style="height: 0">
@@ -66,11 +75,17 @@
           cno: '',
           abs: '',
           sellPrice: '',
+          originPrice: '',
           cover: '',
           date: ''
         },
+        dbCate:[],
         formLabelWidth: '120px'
       }
+    },
+    mounted () {
+      // this.loadCommodities()
+      this.listCate()
     },
     methods: {
       clear () {
@@ -85,10 +100,23 @@
           cno: '',
           abs: '',
           sellPrice: '',
+          originPrice: '',
           cover: '',
           date: ''
         }
       },
+      listCate(){
+        let _this = this
+        this.$axios
+          .get('/cateInfo').then(resp => {
+            console.log(resp);
+            
+            _this.dbCate = resp.data
+        })
+
+      },
+
+
       onSubmit () {
         this.$axios
           .post('/admin/content/commodities', {
@@ -99,7 +127,9 @@
             abs: this.form.abs,
             cover: this.form.cover,
             date: this.form.date,
-            sellPrice: this.form.sellPrice
+            sellPrice: this.form.sellPrice,
+            originPrice: this.form.originPrice
+            
           }).then(resp => {
             if (resp && resp.status === 200) {
               this.dialogFormVisible = false
